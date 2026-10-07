@@ -6,6 +6,8 @@ A modern take on FormKeep's [Gridforms](https://formkeep.com/gridforms): the den
 
 > *Formulaire* is French for form, the paper kind you fill out at the post office.
 
+**Live demo and docs: [formulaire.mattrothenberg.com](https://formulaire.mattrothenberg.com)**
+
 ## Install
 
 ```sh

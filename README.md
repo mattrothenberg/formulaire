@@ -8,6 +8,8 @@ A modern take on FormKeep's [Gridforms](https://formkeep.com/gridforms): the den
 npm install formulaire-ui @base-ui/react
 ```
 
+**Live demo and docs: [formulaire.mattrothenberg.com](https://formulaire.mattrothenberg.com)**
+
 This is the monorepo. The library's own docs live in [`packages/formulaire`](packages/formulaire/README.md).
 
 | Path | What | Published |

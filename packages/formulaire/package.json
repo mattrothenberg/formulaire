@@ -9,7 +9,7 @@
     "url": "git+https://github.com/mattrothenberg/formulaire.git",
     "directory": "packages/formulaire"
   },
-  "homepage": "https://github.com/mattrothenberg/formulaire#readme",
+  "homepage": "https://formulaire.mattrothenberg.com",
   "bugs": {
     "url": "https://github.com/mattrothenberg/formulaire/issues"
   },
