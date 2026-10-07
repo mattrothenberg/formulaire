@@ -155,6 +155,7 @@ export function CodeTabs({
   tabs,
   hint,
   maxHeight,
+  expandable = false,
   className,
   value,
   onValueChange,
@@ -162,6 +163,8 @@ export function CodeTabs({
   tabs: CodeTab[];
   hint?: React.ReactNode;
   maxHeight?: string;
+  /** Starts at maxHeight with a button to show everything. */
+  expandable?: boolean;
   className?: string;
   value?: string;
   onValueChange?: (id: string) => void;
@@ -173,6 +176,7 @@ export function CodeTabs({
     onValueChange?.(id);
   };
   const baseId = React.useId();
+  const [expanded, setExpanded] = React.useState(false);
   const tab = tabs.find((t) => t.id === activeId) ?? tabs[0];
   const html = useHighlighted(tab.code, tab.lang);
   const scrollRef = React.useRef<HTMLDivElement>(null);
@@ -236,6 +240,17 @@ export function CodeTabs({
           ))}
         </div>
         {hint != null && <span className="code-tabs-hint">{hint}</span>}
+        {expandable && (
+          <button
+            type="button"
+            className="code-copy"
+            aria-expanded={expanded}
+            aria-controls={`${baseId}-panel`}
+            onClick={() => setExpanded((e) => !e)}
+          >
+            {expanded ? 'Collapse' : 'Expand'}
+          </button>
+        )}
         <CopyButton text={tab.code} />
       </div>
       <div
@@ -245,7 +260,8 @@ export function CodeTabs({
         role="tabpanel"
         aria-labelledby={`${baseId}-tab-${tab.id}`}
         tabIndex={0}
-        style={{ maxHeight }}
+        data-collapsed={(expandable && !expanded) || undefined}
+        style={{ maxHeight: expanded ? undefined : maxHeight }}
       >
         {html ? (
           <div dangerouslySetInnerHTML={{ __html: html }} />

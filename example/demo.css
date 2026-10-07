@@ -541,6 +541,11 @@ body.is-resizing {
   font-family: var(--sans);
 }
 
+/* Collapsed panels fade out at the bottom edge. */
+.code-scroll[data-collapsed] {
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 3rem), transparent);
+}
+
 .code-scroll:focus-visible {
   outline: 2px solid var(--ink);
   outline-offset: -2px;
@@ -615,7 +620,8 @@ body.is-resizing {
   font-weight: 400;
 }
 
-.code-tabs-hint + .code-copy {
+.code-tabs-hint + .code-copy,
+.code-copy + .code-copy {
   margin-left: 0;
 }
 

@@ -682,9 +682,16 @@ function App() {
         </div>
 
 
+        {submitted && (
+          <pre className="code" aria-label="Submitted values">
+            {JSON.stringify(submitted, null, 2)}
+          </pre>
+        )}
+
         <CodeTabs
           className="source"
-          maxHeight="26rem"
+          maxHeight="14rem"
+          expandable
           value={codeLang}
           onValueChange={(id) => setCodeLang(id as 'react' | 'html')}
           tabs={[
@@ -693,11 +700,6 @@ function App() {
           ]}
         />
 
-        {submitted && (
-          <pre className="code" aria-label="Submitted values">
-            {JSON.stringify(submitted, null, 2)}
-          </pre>
-        )}
       </figure>
 
       <article className="prose">
