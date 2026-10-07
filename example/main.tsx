@@ -58,6 +58,10 @@ const states = ['CA', 'NY', 'OR', 'TX', 'WA'].map((s) => ({
   label: s,
 }));
 
+// TODO: confirm once the repo is pushed and the package is published.
+const REPO_URL = 'https://github.com/mattrothenberg/formulaire';
+const NPM_URL = 'https://www.npmjs.com/package/formulaire-ui';
+
 const MIN_WIDTH = 320;
 const MAX_WIDTH = 1088;
 
@@ -359,7 +363,7 @@ function App() {
       <header className="masthead wide">
         <nav className="masthead-nav">
           <ThemeToggle theme={theme} onChange={setTheme} />
-          <a className="masthead-link" href="https://github.com/mattrothenberg">
+          <a className="masthead-link" href={REPO_URL}>
             GitHub
           </a>
         </nav>
@@ -746,6 +750,9 @@ function App() {
         <p>
           Made by Matt Rothenberg, after{' '}
           <a href="https://formkeep.com/gridforms">Gridforms</a> by FormKeep.
+        </p>
+        <p className="colophon-meta">
+          MIT · <a href={REPO_URL}>GitHub</a> · <a href={NPM_URL}>npm</a>
         </p>
       </footer>
 

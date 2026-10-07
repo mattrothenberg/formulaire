@@ -907,6 +907,17 @@ body.is-resizing {
   margin: 0;
 }
 
+.colophon-meta {
+  margin-top: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  letter-spacing: 0.02em;
+}
+
+.colophon-meta a {
+  color: inherit;
+}
+
 .colophon em {
   color: var(--muted);
 }
