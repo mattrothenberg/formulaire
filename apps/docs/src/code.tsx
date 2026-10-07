@@ -122,6 +122,28 @@ export function CopyButton({ text, label = 'Copy' }: { text: string; label?: str
   );
 }
 
+/** A short, static, highlighted snippet with a copy button. */
+export function Snippet({ code, lang, label }: { code: string; lang: Lang; label: string }) {
+  const html = useHighlighted(code, lang);
+  return (
+    <figure className="snippet">
+      <figcaption className="snippet-bar">
+        <span>{label}</span>
+        <CopyButton text={code} />
+      </figcaption>
+      <div className="code-scroll">
+        {html ? (
+          <div dangerouslySetInnerHTML={{ __html: html }} />
+        ) : (
+          <pre className="shiki">
+            <code>{code}</code>
+          </pre>
+        )}
+      </div>
+    </figure>
+  );
+}
+
 /** A one-line shell command with a copy button. */
 export function Command({ code }: { code: string }) {
   const html = useHighlighted(code, 'bash');

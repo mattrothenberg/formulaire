@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { GridForm, type Density, type Mode } from 'formulaire-ui';
 import 'formulaire-ui/styles.css';
-import { CodePeek, CodeTabs, Command } from './code';
+import { CodePeek, CodeTabs, Command, Snippet } from './code';
 import { Mark } from './mark';
 import { ComponentBento } from './bento';
 import { MaskedInput, phoneMask, zipMask } from './masks';
@@ -61,6 +61,19 @@ const states = ['CA', 'NY', 'OR', 'TX', 'WA'].map((s) => ({
 // TODO: confirm once the repo is pushed and the package is published.
 const REPO_URL = 'https://github.com/mattrothenberg/formulaire';
 const NPM_URL = 'https://www.npmjs.com/package/formulaire-ui';
+
+const wayHtml = `<link rel="stylesheet" href="formulaire-ui/styles.css">
+
+<div class="gf-field" data-span="2">
+  <label class="gf-label" for="email">Email</label>
+  <input class="gf-input" id="email" type="email" required>
+</div>`;
+
+const wayTsx = `import { GridForm } from 'formulaire-ui';
+
+<GridForm.Field name="email" label="Email" span={2}>
+  <GridForm.Input type="email" required />
+</GridForm.Field>`;
 
 const MIN_WIDTH = 320;
 const MAX_WIDTH = 1088;
@@ -724,14 +737,36 @@ function App() {
           like pen on paper, and empty fields get a dash. It prints well, too.
         </p>
 
-        <h2>Base UI underneath</h2>
-        <p>
-          Labels, descriptions, validation and focus state come from Base UI.
-          Formulaire only adds the grid and the look, so every cell is as
-          accessible as the primitive inside it.
-        </p>
-
       </article>
+
+      <section className="ways wide">
+        <h2>Two ways in</h2>
+        <div className="ways-grid">
+          <div className="way">
+            <h3>Plain HTML and CSS</h3>
+            <p>
+              One stylesheet and a few classes on ordinary inputs. You get the
+              grid, the labels, focus and error states. No JavaScript, no build
+              step.
+            </p>
+            <Snippet lang="html" label="HTML" code={wayHtml} />
+          </div>
+          <div className="way">
+            <h3>React on Base UI</h3>
+            <p>
+              The same markup as components. Base UI handles labelling,
+              validation messages and the hard controls: selects, radio
+              groups, checkboxes and number fields.
+            </p>
+            <Snippet lang="tsx" label="React" code={wayTsx} />
+          </div>
+        </div>
+        <p className="ways-note">
+          Both use the same classes and <code>--gf-*</code> variables, inside{' '}
+          <code>@layer formulaire</code>, so any CSS of yours wins. Density,
+          focus style and filled mode are data attributes on the form.
+        </p>
+      </section>
 
       <section className="components wide">
         <h2>Components</h2>

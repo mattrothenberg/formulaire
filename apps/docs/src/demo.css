@@ -820,6 +820,93 @@ body.is-resizing {
   margin-top: 0;
 }
 
+/* ------------------------------------------------------------ two ways */
+
+.ways {
+  margin-top: 3.5rem;
+}
+
+.ways h2 {
+  margin: 0 0 1rem;
+  color: var(--faint);
+  font-size: inherit;
+  font-weight: 500;
+}
+
+/*
+ * Each column spans three shared rows (heading, copy, code) via subgrid, so
+ * the code panels line up and match heights however the copy wraps.
+ */
+.ways-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 2rem;
+  row-gap: 0;
+}
+
+.way {
+  display: grid;
+  grid-row: span 3;
+  grid-template-rows: subgrid;
+  row-gap: 0.5rem;
+  min-width: 0;
+}
+
+.way h3 {
+  margin: 0;
+  font-size: inherit;
+  font-weight: 500;
+}
+
+.way p,
+.ways-note {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.way .snippet {
+  margin-top: 0.75rem;
+}
+
+.ways-note {
+  max-width: 40rem;
+  margin-top: 1.5rem;
+  color: var(--muted);
+}
+
+.ways-note code {
+  font-family: var(--mono);
+}
+
+@media (max-width: 52rem) {
+  .ways-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .way + .way {
+    margin-top: 2rem;
+  }
+}
+
+/* A static snippet: the code panel's look, without tabs. */
+.snippet {
+  overflow: hidden;
+  margin: 0;
+  border-radius: 8px;
+  background: var(--paper);
+  box-shadow: 0 0 0 1px var(--rule);
+}
+
+.snippet-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 1rem;
+}
+
 /* ------------------------------------------------------------ components */
 
 .components {
