@@ -631,10 +631,20 @@ body.is-resizing {
   text-align: right;
 }
 
+/*
+ * Never trap the page's scroll. Vertical scrolling chains to the page at
+ * either end; only sideways scrolling is contained, so a trackpad swipe
+ * on a long line doesn't navigate back.
+ */
 .code-scroll {
   position: relative;
   overflow: auto;
-  overscroll-behavior: contain;
+  overscroll-behavior-x: contain;
+}
+
+/* Collapsed: a preview, not a scroller. X-ray still scrolls it from code. */
+.code-scroll[data-collapsed] {
+  overflow-y: hidden;
 }
 
 .code-scroll pre {
@@ -904,7 +914,7 @@ body.is-resizing {
   padding-top: 1.5rem;
   border-top: 1px solid var(--rule);
   color: var(--faint);
-  font-size: 1.0625rem;
+  font-size: 1rem;
   font-weight: 400;
   line-height: 1.45;
 }
@@ -913,15 +923,31 @@ body.is-resizing {
   margin: 0;
 }
 
-.colophon-meta {
-  margin-top: 0.5rem;
-  font-family: var(--mono);
-  font-size: 0.875rem;
-  letter-spacing: 0.02em;
+/* One row: the credit, then the links, all in the same quiet type. */
+.colophon {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem 1.5rem;
 }
 
-.colophon-meta a {
-  color: inherit;
+.colophon-links {
+  display: flex;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.colophon-links a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 120ms ease-out;
+}
+
+.colophon-links a:hover {
+  color: var(--ink);
 }
 
 .colophon em {

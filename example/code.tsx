@@ -156,6 +156,7 @@ export function CodeTabs({
   hint,
   maxHeight,
   expandable = false,
+  expandedMaxHeight,
   className,
   value,
   onValueChange,
@@ -165,6 +166,8 @@ export function CodeTabs({
   maxHeight?: string;
   /** Starts at maxHeight with a button to show everything. */
   expandable?: boolean;
+  /** Height cap once expanded; past it the panel scrolls. */
+  expandedMaxHeight?: string;
   className?: string;
   value?: string;
   onValueChange?: (id: string) => void;
@@ -261,7 +264,7 @@ export function CodeTabs({
         aria-labelledby={`${baseId}-tab-${tab.id}`}
         tabIndex={0}
         data-collapsed={(expandable && !expanded) || undefined}
-        style={{ maxHeight: expanded ? undefined : maxHeight }}
+        style={{ maxHeight: expanded ? expandedMaxHeight : maxHeight }}
       >
         {html ? (
           <div dangerouslySetInnerHTML={{ __html: html }} />
