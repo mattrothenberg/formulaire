@@ -749,15 +749,15 @@ function App() {
         />
       </article>
 
-      {/* Plain .gf markup in filled mode: the CSS core, no React needed. */}
+      {/* The colophon is the form's own wireframe: plain .gf markup, X-rayed. */}
       <footer className="colophon">
         <div className="gf" data-mode="filled" data-density="compact">
           <dl className="gf-row">
-            <div className="gf-field" data-span="2">
+            <div className="gf-field" data-span="2" data-field="made-by">
               <dt className="gf-label">Made by</dt>
               <dd>Matt Rothenberg</dd>
             </div>
-            <div className="gf-field" data-span="2">
+            <div className="gf-field" data-span="2" data-field="inspired-by">
               <dt className="gf-label">Inspired by</dt>
               <dd>
                 <a href="https://formkeep.com/gridforms">Gridforms</a> by
@@ -766,19 +766,19 @@ function App() {
             </div>
           </dl>
           <dl className="gf-row">
-            <div className="gf-field">
+            <div className="gf-field" data-field="source" data-span="1">
               <dt className="gf-label">Source</dt>
               <dd>
                 <a href={REPO_URL}>GitHub</a>
               </dd>
             </div>
-            <div className="gf-field">
+            <div className="gf-field" data-field="package" data-span="1">
               <dt className="gf-label">Package</dt>
               <dd>
                 <a href={NPM_URL}>npm</a>
               </dd>
             </div>
-            <div className="gf-field">
+            <div className="gf-field" data-field="license" data-span="1">
               <dt className="gf-label">License</dt>
               <dd>MIT</dd>
             </div>
