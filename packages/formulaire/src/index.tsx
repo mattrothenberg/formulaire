@@ -35,6 +35,16 @@ function useNonNativeLabel() {
 
 /* -------------------------------------------------------------------------- */
 
+type FormErrors = NonNullable<React.ComponentProps<typeof BaseForm>['errors']>;
+
+// The form's external errors (e.g. from a server), so each Field can show its
+// own message. Root keeps the working copy and hands it to Base UI's Form too,
+// so both always agree on which fields are invalid.
+const FormErrorsContext = React.createContext<{
+  errors: FormErrors;
+  clear: (name: string) => void;
+} | null>(null);
+
 export interface RootProps
   extends Omit<React.ComponentProps<typeof BaseForm>, 'className'> {
   /** `filled` renders every control read-only, like a completed paper form. */
@@ -47,16 +57,37 @@ function Root({
   mode = 'edit',
   density = 'comfortable',
   className,
+  errors: errorsProp,
   ...props
 }: RootProps) {
+  // Like Base UI, a field's external error clears once the user edits it, and
+  // a new `errors` prop replaces the set.
+  const [errors, setErrors] = React.useState<FormErrors>(errorsProp ?? {});
+  const [lastProp, setLastProp] = React.useState(errorsProp);
+  if (errorsProp !== lastProp) {
+    setLastProp(errorsProp);
+    setErrors(errorsProp ?? {});
+  }
+  const clear = React.useCallback((name: string) => {
+    setErrors((current) => {
+      if (!Object.hasOwn(current, name)) return current;
+      const { [name]: _cleared, ...rest } = current;
+      return rest;
+    });
+  }, []);
+  const context = React.useMemo(() => ({ errors, clear }), [errors, clear]);
+
   return (
     <ModeContext.Provider value={mode}>
-      <BaseForm
-        data-mode={mode}
-        data-density={density}
-        className={cx('gf', className)}
-        {...props}
-      />
+      <FormErrorsContext.Provider value={context}>
+        <BaseForm
+          data-mode={mode}
+          data-density={density}
+          className={cx('gf', className)}
+          errors={errors}
+          {...props}
+        />
+      </FormErrorsContext.Provider>
     </ModeContext.Provider>
   );
 }
@@ -115,6 +146,9 @@ function Button({
 
 /* -------------------------------------------------------------------------- */
 
+const hasContent = (value: React.ReactNode) =>
+  value != null && value !== false && value !== '';
+
 const DEFAULT_MESSAGES: Partial<Record<keyof ValidityState, string>> = {
   valueMissing: 'Required',
   typeMismatch: 'Check format',
@@ -136,6 +170,12 @@ export interface FieldProps
   /** Relative width within the row. Also sets how early the cell wraps. */
   span?: number;
   description?: React.ReactNode;
+  /**
+   * An error message from outside the browser's own validation, such as
+   * react-hook-form or a server. While set, the field is invalid and this
+   * message replaces the built-in ones.
+   */
+  error?: React.ReactNode;
   /** Override the short default validation messages. */
   messages?: Partial<Record<keyof ValidityState, React.ReactNode>>;
   className?: string;
@@ -146,14 +186,25 @@ function Field({
   label,
   span = 1,
   description,
+  error,
   messages,
   className,
   style,
   children,
+  invalid,
+  onChange,
   ...props
 }: FieldProps) {
   const [nativeLabel, setNativeLabel] = React.useState(true);
   const allMessages = { ...DEFAULT_MESSAGES, ...messages };
+
+  // An explicit `error` wins; otherwise the form's errors for this name.
+  const form = React.useContext(FormErrorsContext);
+  const name = props.name;
+  const formError = name ? form?.errors[name] : undefined;
+  const formMessage = Array.isArray(formError) ? formError[0] : formError;
+  const message = hasContent(error) ? error : formMessage;
+  const external = hasContent(message);
 
   return (
     <LabelContext.Provider value={setNativeLabel}>
@@ -162,6 +213,12 @@ function Field({
         data-field={props.name}
         data-span={span}
         style={{ '--gf-span': span, ...style } as React.CSSProperties}
+        invalid={hasContent(error) ? true : invalid}
+        onChange={(event) => {
+          // Editing the field clears its form-level error, as in Base UI.
+          if (name && hasContent(formMessage)) form?.clear(name);
+          onChange?.(event);
+        }}
         onMouseDown={(event) => {
           // Clicking the cell's padding focuses its control, like the original.
           if (event.target !== event.currentTarget) return;
@@ -182,16 +239,24 @@ function Field({
         >
           {label}
         </BaseField.Label>
-        {Object.entries(allMessages).map(([key, message]) => (
-          <BaseField.Error
-            key={key}
-            className="gf-error"
-            match={key as keyof ValidityState}
-          >
+        {external ? (
+          <BaseField.Error className="gf-error" match>
             {message}
           </BaseField.Error>
-        ))}
-        <BaseField.Error className="gf-error" match="customError" />
+        ) : (
+          <>
+            {Object.entries(allMessages).map(([key, short]) => (
+              <BaseField.Error
+                key={key}
+                className="gf-error"
+                match={key as keyof ValidityState}
+              >
+                {short}
+              </BaseField.Error>
+            ))}
+            <BaseField.Error className="gf-error" match="customError" />
+          </>
+        )}
         {children}
         {description != null && (
           <BaseField.Description className="gf-description">
