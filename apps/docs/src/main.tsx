@@ -382,10 +382,7 @@ function App() {
 
       <section className="intro">
         <Mark size={72} className="hero-mark" />
-        <h1>
-          Formulaire
-          <span>Forms on a grid.</span>
-        </h1>
+        <h1>Formulaire</h1>
         <p>
           A modern take on FormKeep's{' '}
           <a href="https://formkeep.com/gridforms">Gridforms</a>: the densest
