@@ -4,6 +4,7 @@ import { GridForm, type Density, type Mode } from 'formulaire-ui';
 import 'formulaire-ui/styles.css';
 import { CodePeek, CodeTabs, Command } from './code';
 import { Mark } from './mark';
+import { applyFromUrl } from './audition';
 import { ComponentBento } from './bento';
 import { MaskedInput, phoneMask, zipMask } from './masks';
 import { demoHtml, demoTsx, fieldSnippet, installCode } from './source';
@@ -789,6 +790,9 @@ function App() {
     </main>
   );
 }
+
+// Temporary type audition: /?sans=…&mono=… (see fonts.html).
+applyFromUrl();
 
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
