@@ -196,11 +196,6 @@ h1 {
   letter-spacing: -0.02em;
 }
 
-h1 span {
-  display: block;
-  color: var(--faint);
-}
-
 .width-tag {
   font-family: var(--mono);
   font-size: 0.875rem;
