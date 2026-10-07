@@ -84,7 +84,6 @@ type WidthPreset = 'sidebar' | 'half' | 'full';
 
 type Theme = 'system' | 'light' | 'dark';
 type Focus = 'fill' | 'ring' | 'underline';
-type ActionsStyle = 'bar' | 'cells';
 type Accent = 'blue' | 'red' | 'green' | 'graphite';
 
 const accents: Array<{ value: Accent; label: string }> = [
@@ -292,7 +291,6 @@ function App() {
   const [mode, setMode] = React.useState<Mode>('edit');
   const [density, setDensity] = React.useState<Density>('comfortable');
   const [focus, setFocus] = React.useState<Focus>('fill');
-  const [actions, setActions] = React.useState<ActionsStyle>('bar');
   const [accent, setAccent] = React.useState<Accent>('blue');
   const [theme, setTheme] = React.useState<Theme>('system');
   const [stageWidth, setStageWidth] = React.useState<number | null>(null);
@@ -360,7 +358,7 @@ function App() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [peek]);
 
-  const rootOptions = { mode, density, focus, actions };
+  const rootOptions = { mode, density, focus };
   const tsx = demoTsx(rootOptions);
   const html = demoHtml(rootOptions);
 
@@ -455,7 +453,6 @@ function App() {
                 mode={mode}
                 density={density}
                 data-focus={focus}
-                data-actions={actions}
                 onFormSubmit={(values) => {
                   setSubmitted(values);
                   setMode('filled');
@@ -647,18 +644,6 @@ function App() {
                   { value: 'underline', label: 'Line' },
                 ]}
                 onChange={setFocus}
-              />
-            </div>
-            <div className="control">
-              <span className="control-label">Buttons</span>
-              <Segmented
-                label="Buttons"
-                value={actions}
-                options={[
-                  { value: 'bar', label: 'Bar' },
-                  { value: 'cells', label: 'Cells' },
-                ]}
-                onChange={setActions}
               />
             </div>
             <div className="control">

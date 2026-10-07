@@ -622,11 +622,8 @@
 
   /* --------------------------------------------------------------- actions */
 
-  /*
-   * A footer row inside the grid. data-actions on .gf picks the style:
-   * bar (default) or cells, where each button is a cell of its own.
-   */
-  /* Right-aligned; put the primary button last so it lands in the corner. */
+  /* A footer row inside the grid. Right-aligned; put the primary button
+     last so it lands in the corner. */
   .gf-actions {
     display: flex;
     flex-wrap: wrap;
@@ -664,7 +661,7 @@
     outline-offset: 2px;
   }
 
-  /* The primary action carries the accent, the same as in the cells style. */
+  /* The primary action carries the accent. */
   .gf-button[data-variant='primary'] {
     border-color: var(--gf-accent);
     background: var(--gf-accent);
@@ -673,46 +670,6 @@
 
   .gf-button[data-variant='primary']:hover {
     background: color-mix(in oklch, var(--gf-accent) 88%, var(--gf-ink));
-  }
-
-  .gf[data-actions='cells'] .gf-actions {
-    align-items: stretch;
-    gap: var(--gf-line-width);
-    padding: 0;
-    background: var(--gf-line);
-  }
-
-  .gf[data-actions='cells'] .gf-button {
-    padding: calc(var(--gf-pad-y) * 1.4) var(--gf-pad-x);
-    border: 0;
-    border-radius: 0;
-    font-family: var(--gf-font-label);
-    font-size: var(--gf-label-size);
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-align: start;
-    text-transform: uppercase;
-  }
-
-  .gf[data-actions='cells'] .gf-button[data-variant='primary'] {
-    flex: 1;
-    text-align: end;
-    background: var(--gf-accent);
-    color: var(--gf-paper);
-  }
-
-  .gf[data-actions='cells'] .gf-button[data-variant='primary']:hover {
-    background: color-mix(in oklch, var(--gf-accent) 88%, var(--gf-ink));
-  }
-
-  .gf[data-actions='cells'] .gf-button:focus-visible {
-    outline-color: var(--gf-paper);
-    outline-offset: -4px;
-  }
-
-  .gf[data-actions='cells']
-    .gf-button[data-variant='secondary']:focus-visible {
-    outline-color: var(--gf-accent);
   }
 
   /* ----------------------------------------------------------- filled mode */

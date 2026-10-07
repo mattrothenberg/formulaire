@@ -4,15 +4,13 @@ interface RootOptions {
   mode: string;
   density: string;
   focus: string;
-  actions: string;
 }
 
-export function demoTsx({ mode, density, focus, actions }: RootOptions) {
+export function demoTsx({ mode, density, focus }: RootOptions) {
   const props = [
     mode !== 'edit' && `mode="${mode}"`,
     density !== 'comfortable' && `density="${density}"`,
     focus !== 'fill' && `data-focus="${focus}"`,
-    actions !== 'bar' && `data-actions="${actions}"`,
     'onFormSubmit={placeOrder}',
   ].filter(Boolean);
 
@@ -105,13 +103,12 @@ import 'formulaire-ui/styles.css';
 </GridForm.Root>`;
 }
 
-export function demoHtml({ mode, density, focus, actions }: RootOptions) {
+export function demoHtml({ mode, density, focus }: RootOptions) {
   const attrs = [
     'class="gf"',
     mode !== 'edit' && `data-mode="${mode}"`,
     density !== 'comfortable' && `data-density="${density}"`,
     focus !== 'fill' && `data-focus="${focus}"`,
-    actions !== 'bar' && `data-actions="${actions}"`,
   ].filter(Boolean);
 
   return `<link rel="stylesheet" href="formulaire-ui/styles.css">
