@@ -5,8 +5,9 @@
   "scripts": {
     "dev": "vite --port 5317",
     "build": "vite build",
-    "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "preview": "vite build && wrangler dev",
+    "typecheck": "tsc --noEmit",
+    "deploy": "vite build && wrangler deploy"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
@@ -26,6 +27,7 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.1",
     "typescript": "^7.0.2",
-    "vite": "^8.3.2"
+    "vite": "^8.3.2",
+    "wrangler": "4.147.0"
   }
 }

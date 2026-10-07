@@ -8,7 +8,9 @@ packages:
 # Applies to resolution and to verifying the committed lockfile on install.
 minimumReleaseAge: 4320
 
-# Dependencies with install scripts. esbuild's postinstall only validates its
-# binary and is not required, so we deliberately leave it off.
+# Dependencies with install scripts. esbuild's and workerd's postinstalls only
+# validate their platform binaries and aren't required, so both stay off.
 allowBuilds:
   esbuild: false
+  workerd: false
+  workerd: set this to true or false
