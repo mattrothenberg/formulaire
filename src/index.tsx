@@ -259,13 +259,57 @@ function Select({
   items,
   placeholder = 'Select…',
   className,
+  onOpenChange,
+  onOpenChangeComplete,
   ...props
 }: SelectProps) {
   useNonNativeLabel();
   const readOnly = useReadOnly();
+  const triggerRef = React.useRef<HTMLButtonElement>(null);
+
+  /*
+   * Keeps the cell styled as active from the moment the menu opens until
+   * focus is back on the trigger. While the menu animates closed, focus is
+   * still on an option outside the cell, and it only returns once the menu
+   * unmounts. Without this the focus ring fades out and back in.
+   */
+  const [active, setActive] = React.useState(false);
+  const settle = () => {
+    const trigger = triggerRef.current;
+    const focused = document.activeElement;
+    // Focus moved somewhere else on purpose (e.g. a click into another cell).
+    if (!trigger || (focused && focused !== document.body && !focused.closest('.gf-popup'))) {
+      setActive(false);
+      return;
+    }
+    const done = () => {
+      window.clearTimeout(fallback);
+      trigger.removeEventListener('focus', done);
+      setActive(false);
+    };
+    const fallback = window.setTimeout(done, 150);
+    trigger.addEventListener('focus', done);
+  };
+
   return (
-    <BaseSelect.Root items={items} readOnly={readOnly} {...props}>
-      <BaseSelect.Trigger className={cx('gf-control', 'gf-select', className)}>
+    <BaseSelect.Root
+      items={items}
+      readOnly={readOnly}
+      onOpenChange={(open, details) => {
+        if (open) setActive(true);
+        onOpenChange?.(open, details);
+      }}
+      onOpenChangeComplete={(open) => {
+        if (!open) settle();
+        onOpenChangeComplete?.(open);
+      }}
+      {...props}
+    >
+      <BaseSelect.Trigger
+        ref={triggerRef}
+        className={cx('gf-control', 'gf-select', className)}
+        data-menu-active={active || undefined}
+      >
         <BaseSelect.Value
           className="gf-select-value"
           placeholder={placeholder}

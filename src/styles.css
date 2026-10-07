@@ -186,27 +186,27 @@
   /*
    * The tint alone is too faint to count as a focus indicator (WCAG 1.4.11
    * asks for 3:1), so every style also draws a 2px line or ring in the
-   * focus color. A cell also stays active while its Select menu is open,
-   * since focus moves into the menu, which renders outside the cell.
+   * focus color. A cell also stays active while its Select menu is open or
+   * closing (data-menu-active), since focus is in the menu, outside the cell.
    */
-  .gf-field:is(:focus-within, :has([data-popup-open])) {
+  .gf-field:is(:focus-within, :has([data-menu-active])) {
     background: var(--gf-highlight);
     box-shadow: inset 0 -2px 0 var(--gf-focus-color);
   }
 
-  .gf-field[data-invalid]:is(:focus-within, :has([data-popup-open])) {
+  .gf-field[data-invalid]:is(:focus-within, :has([data-menu-active])) {
     background: var(--gf-danger-bg);
   }
 
-  .gf[data-focus='ring'] .gf-field:is(:focus-within, :has([data-popup-open])) {
+  .gf[data-focus='ring'] .gf-field:is(:focus-within, :has([data-menu-active])) {
     box-shadow: inset 0 0 0 2px var(--gf-focus-color);
   }
 
-  .gf[data-focus='underline'] .gf-field:is(:focus-within, :has([data-popup-open])) {
+  .gf[data-focus='underline'] .gf-field:is(:focus-within, :has([data-menu-active])) {
     background: var(--gf-paper);
   }
 
-  .gf[data-focus='underline'] .gf-field[data-invalid]:is(:focus-within, :has([data-popup-open])) {
+  .gf[data-focus='underline'] .gf-field[data-invalid]:is(:focus-within, :has([data-menu-active])) {
     background: var(--gf-danger-bg);
   }
 
@@ -242,7 +242,7 @@
     color: var(--gf-accent);
   }
 
-  .gf-field:is(:focus-within, :has([data-popup-open])) .gf-label {
+  .gf-field:is(:focus-within, :has([data-menu-active])) .gf-label {
     color: var(--gf-ink);
   }
 
