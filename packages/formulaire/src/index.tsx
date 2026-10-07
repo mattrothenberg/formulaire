@@ -146,6 +146,19 @@ function Button({
 
 /* -------------------------------------------------------------------------- */
 
+function useMergedRef<T>(...refs: Array<React.Ref<T> | undefined>) {
+  return React.useCallback(
+    (node: T | null) => {
+      for (const ref of refs) {
+        if (typeof ref === 'function') ref(node);
+        else if (ref) (ref as React.RefObject<T | null>).current = node;
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    refs
+  );
+}
+
 const hasContent = (value: React.ReactNode) =>
   value != null && value !== false && value !== '';
 
@@ -193,6 +206,7 @@ function Field({
   children,
   invalid,
   onChange,
+  ref,
   ...props
 }: FieldProps) {
   const [nativeLabel, setNativeLabel] = React.useState(true);
@@ -206,10 +220,39 @@ function Field({
   const message = hasContent(error) ? error : formMessage;
   const external = hasContent(message);
 
+  // A message that won't fit on one line beside the label (within 60% of the
+  // cell) moves to its own full-width line under the control instead.
+  const fieldRef = React.useRef<HTMLDivElement>(null);
+  const rootRef = useMergedRef(fieldRef, ref);
+  const measureRef = React.useRef<HTMLSpanElement>(null);
+  const [errorBelow, setErrorBelow] = React.useState(false);
+  React.useLayoutEffect(() => {
+    const field = fieldRef.current;
+    const measure = measureRef.current;
+    if (!external || !field || !measure) {
+      setErrorBelow(false);
+      return;
+    }
+    const check = () => {
+      const style = getComputedStyle(field);
+      const inner =
+        field.clientWidth -
+        parseFloat(style.paddingLeft) -
+        parseFloat(style.paddingRight);
+      setErrorBelow(measure.offsetWidth > inner * 0.6);
+    };
+    check();
+    const observer = new ResizeObserver(check);
+    observer.observe(field);
+    return () => observer.disconnect();
+  }, [external, message]);
+
   return (
     <LabelContext.Provider value={setNativeLabel}>
       <BaseField.Root
+        ref={rootRef}
         className={cx('gf-field', className)}
+        data-error-below={errorBelow || undefined}
         data-field={props.name}
         data-span={span}
         style={{ '--gf-span': span, ...style } as React.CSSProperties}
@@ -240,9 +283,15 @@ function Field({
           {label}
         </BaseField.Label>
         {external ? (
-          <BaseField.Error className="gf-error" match>
-            {message}
-          </BaseField.Error>
+          <>
+            <BaseField.Error className="gf-error" match>
+              {message}
+            </BaseField.Error>
+            {/* Measures the message on one line; never shown or announced. */}
+            <span ref={measureRef} className="gf-error gf-error-measure" aria-hidden>
+              {message}
+            </span>
+          </>
         ) : (
           <>
             {Object.entries(allMessages).map(([key, short]) => (
