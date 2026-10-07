@@ -917,6 +917,11 @@ body.is-resizing {
   margin-top: 6rem;
 }
 
+.colophon .gf {
+  /* Ink, not the accent: the footer shouldn't compete with the demo. */
+  --gf-filled-ink: var(--gf-ink);
+}
+
 .colophon .gf-row {
   margin: 0;
 }
