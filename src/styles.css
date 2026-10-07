@@ -1,0 +1,790 @@
+/*
+ * formulaire — dense, paper-style grid forms.
+ *
+ * Works on plain HTML: .gf > .gf-section > .gf-row > .gf-field
+ * (label.gf-label + .gf-input). The React components render the same markup.
+ * Everything lives in a cascade layer, so any unlayered rule overrides it.
+ */
+@layer formulaire {
+  /* ---------------------------------------------------------------- tokens */
+
+  .gf,
+  .gf-popup {
+    --gf-paper: oklch(99.2% 0.004 90);
+    --gf-paper-2: oklch(97.2% 0.006 90);
+    --gf-line: oklch(87.5% 0.01 90);
+    --gf-ink: oklch(23% 0.015 260);
+    --gf-muted: oklch(50% 0.015 260);
+    /* Placeholders and control borders: 4.5:1 on paper, error and focus fills. */
+    --gf-faint: oklch(53% 0.012 260);
+    --gf-accent: oklch(50% 0.16 258);
+    --gf-highlight: oklch(97.4% 0.04 95);
+    --gf-danger: oklch(54% 0.19 27);
+    --gf-danger-bg: oklch(97.2% 0.02 27);
+    --gf-filled-ink: var(--gf-accent);
+    --gf-hover: color-mix(in oklch, var(--gf-highlight) 45%, var(--gf-paper));
+
+    --gf-font: inherit;
+    --gf-font-label: ui-monospace, 'SF Mono', Menlo, monospace;
+    --gf-line-width: 1px;
+    --gf-radius: 6px;
+    --gf-min-col: 8.5rem;
+
+    --gf-pad-y: 0.625rem;
+    --gf-pad-x: 0.75rem;
+    --gf-label-gap: 0.25rem;
+    --gf-label-size: 0.6875rem;
+    --gf-input-size: 1rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) :is(.gf, .gf-popup) {
+      --gf-paper: oklch(21% 0.008 260);
+      --gf-paper-2: oklch(24% 0.009 260);
+      --gf-line: oklch(33% 0.01 260);
+      --gf-ink: oklch(94% 0.005 90);
+      --gf-muted: oklch(71% 0.01 260);
+      --gf-faint: oklch(66% 0.01 260);
+      --gf-accent: oklch(76% 0.12 250);
+      --gf-highlight: oklch(27.5% 0.045 255);
+      --gf-danger: oklch(73% 0.15 25);
+      --gf-danger-bg: oklch(26% 0.04 25);
+    }
+  }
+
+  [data-theme='dark'] :is(.gf, .gf-popup) {
+    --gf-paper: oklch(21% 0.008 260);
+    --gf-paper-2: oklch(24% 0.009 260);
+    --gf-line: oklch(33% 0.01 260);
+    --gf-ink: oklch(94% 0.005 90);
+    --gf-muted: oklch(71% 0.01 260);
+    --gf-faint: oklch(66% 0.01 260);
+    --gf-accent: oklch(76% 0.12 250);
+    --gf-highlight: oklch(27.5% 0.045 255);
+    --gf-danger: oklch(73% 0.15 25);
+    --gf-danger-bg: oklch(26% 0.04 25);
+  }
+
+  .gf[data-density='compact'] {
+    --gf-pad-y: 0.375rem;
+    --gf-pad-x: 0.5625rem;
+    --gf-label-gap: 0.125rem;
+    --gf-label-size: 0.625rem;
+    --gf-input-size: 0.9375rem;
+    --gf-min-col: 7.5rem;
+  }
+
+  .gf[data-density='roomy'] {
+    --gf-pad-y: 0.875rem;
+    --gf-pad-x: 1rem;
+    --gf-label-gap: 0.375rem;
+    --gf-label-size: 0.75rem;
+    --gf-input-size: 1.0625rem;
+    --gf-min-col: 10rem;
+  }
+
+  /* ---------------------------------------------------------------- layout */
+
+  /*
+   * The lines between cells are the form's background showing through a 1px
+   * gap, so they stay crisp however the rows wrap.
+   */
+  .gf {
+    container: formulaire / inline-size;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gf-line-width);
+    background: var(--gf-line);
+    border: var(--gf-line-width) solid var(--gf-line);
+    border-radius: var(--gf-radius);
+    overflow: clip;
+    color: var(--gf-ink);
+    font-family: var(--gf-font);
+  }
+
+  .gf-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gf-line-width);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-inline-size: 0;
+  }
+
+  .gf-legend {
+    padding: calc(var(--gf-pad-y) * 0.9) var(--gf-pad-x);
+    background: var(--gf-paper-2);
+    color: var(--gf-ink);
+    font-family: var(--gf-font-label);
+    font-size: var(--gf-label-size);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /*
+   * No breakpoints: each cell asks for span × --gf-min-col, and the row wraps
+   * when the container can't give it that. Because grow and basis both scale
+   * with span, cells in rows with the same total span line up.
+   */
+  .gf-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gf-line-width);
+  }
+
+  .gf-field {
+    --gf-span: 1;
+    flex: var(--gf-span) 1 calc(var(--gf-span) * var(--gf-min-col));
+    min-inline-size: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'label error'
+      'control control'
+      'description description';
+    align-content: start;
+    row-gap: var(--gf-label-gap);
+    column-gap: 0.5rem;
+    padding: var(--gf-pad-y) var(--gf-pad-x);
+    background: var(--gf-paper);
+    position: relative;
+    cursor: text;
+    transition:
+      background-color 120ms ease-out,
+      box-shadow 120ms ease-out;
+  }
+
+  /* Plain-HTML equivalent of span={n} */
+  .gf-field[data-span='2'] { --gf-span: 2; }
+  .gf-field[data-span='3'] { --gf-span: 3; }
+  .gf-field[data-span='4'] { --gf-span: 4; }
+  .gf-field[data-span='5'] { --gf-span: 5; }
+  .gf-field[data-span='6'] { --gf-span: 6; }
+
+  /*
+   * Focus indicator, set with data-focus on .gf:
+   * fill (default), ring (a spreadsheet-style active cell), underline.
+   */
+  .gf-field {
+    --gf-focus-color: var(--gf-accent);
+  }
+
+  /* A faint tint on hover, like the original Gridforms. */
+  @media (hover: hover) {
+    .gf-field:hover {
+      background: var(--gf-hover);
+    }
+  }
+
+  .gf-field[data-invalid] {
+    --gf-focus-color: var(--gf-danger);
+    background: var(--gf-danger-bg);
+  }
+
+  /*
+   * The tint alone is too faint to count as a focus indicator (WCAG 1.4.11
+   * asks for 3:1), so every style also draws a 2px line or ring in the
+   * focus color.
+   */
+  .gf-field:focus-within {
+    background: var(--gf-highlight);
+    box-shadow: inset 0 -2px 0 var(--gf-focus-color);
+  }
+
+  .gf-field[data-invalid]:focus-within {
+    background: var(--gf-danger-bg);
+  }
+
+  .gf[data-focus='ring'] .gf-field:focus-within {
+    box-shadow: inset 0 0 0 2px var(--gf-focus-color);
+  }
+
+  .gf[data-focus='underline'] .gf-field:focus-within {
+    background: var(--gf-paper);
+  }
+
+  .gf[data-focus='underline'] .gf-field[data-invalid]:focus-within {
+    background: var(--gf-danger-bg);
+  }
+
+
+  .gf-field[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  /* ----------------------------------------------------------------- parts */
+
+  .gf-label {
+    grid-area: label;
+    min-inline-size: 0;
+    overflow: hidden;
+    color: var(--gf-muted);
+    font-family: var(--gf-font-label);
+    font-size: var(--gf-label-size);
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: 0.06em;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: inherit;
+  }
+
+  .gf-field:has(:required, [aria-required='true'], [data-required])
+    .gf-label::after {
+    /* Visual only: assistive tech already announces "required". */
+    content: ' *';
+    content: ' *' / '';
+    color: var(--gf-accent);
+  }
+
+  .gf-field:focus-within .gf-label {
+    color: var(--gf-ink);
+  }
+
+  .gf-field[data-invalid] .gf-label,
+  .gf-field[data-invalid] .gf-label::after {
+    color: var(--gf-danger);
+  }
+
+  .gf-error {
+    grid-area: error;
+    color: var(--gf-danger);
+    font-family: var(--gf-font-label);
+    font-size: var(--gf-label-size);
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .gf-description {
+    grid-area: description;
+    margin: 0;
+    color: var(--gf-muted);
+    font-size: calc(var(--gf-input-size) * 0.78);
+    line-height: 1.4;
+  }
+
+  /* -------------------------------------------------------------- controls */
+
+  .gf-control {
+    grid-area: control;
+  }
+
+  .gf-input {
+    appearance: none;
+    inline-size: 100%;
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    outline: none;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: var(--gf-input-size);
+    line-height: 1.4;
+  }
+
+  .gf-input::placeholder {
+    color: var(--gf-faint);
+    opacity: 1;
+  }
+
+  .gf-textarea {
+    resize: vertical;
+    min-block-size: calc(var(--gf-input-size) * 1.4 * 2);
+  }
+
+  .gf-select {
+    all: unset;
+    grid-area: control;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-inline-size: 0;
+    font-size: var(--gf-input-size);
+    line-height: 1.4;
+    cursor: default;
+  }
+
+  .gf-select-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .gf-select-value[data-placeholder] {
+    color: var(--gf-faint);
+  }
+
+  .gf-select-icon {
+    display: flex;
+    color: var(--gf-muted);
+    transition: transform 150ms ease-out;
+  }
+
+  .gf-select[data-popup-open] .gf-select-icon {
+    transform: rotate(180deg);
+  }
+
+  /* The whole cell opens the select, not just the value line. */
+  .gf-select::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .gf-field:has(.gf-select) {
+    cursor: default;
+  }
+
+  /*
+   * Number: the root dissolves into the cell's grid so the scrub area can sit
+   * over the label row while the input and steppers take the control row.
+   */
+  .gf-number {
+    display: contents;
+  }
+
+  .gf-scrub {
+    grid-area: label;
+    cursor: ew-resize;
+  }
+
+  .gf-scrub-cursor {
+    color: var(--gf-ink);
+    filter: drop-shadow(0 0 1px var(--gf-paper)) drop-shadow(0 0 1px var(--gf-paper));
+  }
+
+  .gf-number-group {
+    display: flex;
+    align-items: center;
+    gap: 0.125rem;
+  }
+
+  .gf-number-group .gf-input {
+    flex: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .gf-stepper {
+    all: unset;
+    display: grid;
+    place-items: center;
+    flex: none;
+    inline-size: 1.375rem;
+    block-size: 1.375rem;
+    border-radius: 4px;
+    color: var(--gf-muted);
+    cursor: default;
+    opacity: 0;
+    transition:
+      opacity 120ms ease-out,
+      background-color 120ms ease-out,
+      color 120ms ease-out;
+  }
+
+  .gf-field:hover .gf-stepper,
+  .gf-field:focus-within .gf-stepper {
+    opacity: 1;
+  }
+
+  @media (hover: none) {
+    .gf-stepper {
+      opacity: 1;
+    }
+  }
+
+  .gf-stepper:hover {
+    background: color-mix(in oklch, var(--gf-ink) 8%, transparent);
+    color: var(--gf-ink);
+  }
+
+  .gf-stepper:active {
+    background: color-mix(in oklch, var(--gf-ink) 14%, transparent);
+  }
+
+  .gf-stepper:focus-visible {
+    outline: 2px solid var(--gf-accent);
+  }
+
+  .gf-field:is(:hover, :focus-within) .gf-stepper[data-disabled] {
+    opacity: 0.3;
+  }
+
+  /*
+   * Options never wrap inside a cell. The cell refuses to shrink below its
+   * options, so the row wraps the whole cell instead. In a narrow container
+   * the options stack into a list.
+   */
+  .gf-choices {
+    display: flex;
+    gap: 0.375rem 1rem;
+    font-size: var(--gf-input-size);
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+
+  .gf-field:has(> .gf-choices) {
+    min-inline-size: max-content;
+  }
+
+  @container formulaire (inline-size < 30rem) {
+    .gf-field:has(> .gf-choices) {
+      min-inline-size: 0;
+    }
+
+    .gf-choices {
+      flex-direction: column;
+    }
+  }
+
+  .gf-choice {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: default;
+    transition: opacity 120ms ease-out;
+  }
+
+  .gf-radio,
+  .gf-checkbox {
+    all: unset;
+    box-sizing: border-box;
+    display: grid;
+    place-items: center;
+    flex: none;
+    inline-size: 0.9375rem;
+    block-size: 0.9375rem;
+    border: 1.5px solid var(--gf-faint);
+    background: var(--gf-paper);
+    color: var(--gf-paper);
+    transition:
+      background-color 120ms ease-out,
+      border-color 120ms ease-out;
+  }
+
+  .gf-radio {
+    border-radius: 50%;
+  }
+
+  .gf-checkbox {
+    border-radius: 3px;
+  }
+
+  :is(.gf-radio, .gf-checkbox):focus-visible {
+    outline: 2px solid var(--gf-accent);
+    outline-offset: 2px;
+  }
+
+  :is(.gf-radio, .gf-checkbox)[data-checked] {
+    border-color: var(--gf-accent);
+    background: var(--gf-accent);
+  }
+
+  .gf-radio-indicator[data-checked] {
+    inline-size: 0.3125rem;
+    block-size: 0.3125rem;
+    border-radius: 50%;
+    background: var(--gf-paper);
+  }
+
+  .gf-checkbox-indicator {
+    display: flex;
+  }
+
+  /* ---------------------------------------------------------------- popups */
+
+  .gf-positioner {
+    z-index: 50;
+    outline: 0;
+  }
+
+  .gf-popup {
+    box-sizing: border-box;
+    min-inline-size: var(--anchor-width);
+    max-block-size: var(--available-height);
+    overflow-y: auto;
+    padding: 0.25rem;
+    border: 1px solid var(--gf-line);
+    border-radius: var(--gf-radius);
+    background: var(--gf-paper);
+    box-shadow:
+      0 1px 2px oklch(0% 0 0 / 0.06),
+      0 8px 24px -6px oklch(0% 0 0 / 0.16);
+    color: var(--gf-ink);
+    font-family: var(--gf-font);
+    font-size: 0.9375rem;
+    outline: 0;
+    transform-origin: var(--transform-origin);
+    transition:
+      opacity 140ms ease-out,
+      transform 140ms ease-out;
+  }
+
+  .gf-popup[data-starting-style],
+  .gf-popup[data-ending-style] {
+    opacity: 0;
+    transform: scale(0.97) translateY(-2px);
+  }
+
+  .gf-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.375rem 0.5rem;
+    border-radius: calc(var(--gf-radius) - 2px);
+    outline: 0;
+    cursor: default;
+    user-select: none;
+  }
+
+  .gf-option[data-highlighted] {
+    background: var(--gf-highlight);
+  }
+
+  .gf-option-indicator {
+    display: flex;
+    color: var(--gf-accent);
+  }
+
+  /* --------------------------------------------------------------- actions */
+
+  /*
+   * A footer row inside the grid. data-actions on .gf picks the style:
+   * bar (default) or cells, where each button is a cell of its own.
+   */
+  /* Right-aligned; put the primary button last so it lands in the corner. */
+  .gf-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
+    padding: var(--gf-pad-x);
+    background: var(--gf-paper-2);
+  }
+
+  .gf-button {
+    appearance: none;
+    /* Trim the line box to cap height so the label sits dead center
+       whatever the font's metrics, then pad evenly around it. */
+    padding: 0.75em 1em;
+    border: var(--gf-line-width) solid var(--gf-line);
+    text-box: trim-both cap alphabetic;
+    border-radius: max(0px, calc(var(--gf-radius) - 2px));
+    background: var(--gf-paper);
+    color: var(--gf-ink);
+    font: inherit;
+    font-size: var(--gf-input-size);
+    font-weight: 500;
+    line-height: 1.25;
+    cursor: pointer;
+    transition: background-color 120ms ease-out;
+  }
+
+  .gf-button:hover {
+    background: var(--gf-hover);
+  }
+
+  .gf-button:focus-visible {
+    outline: 2px solid var(--gf-accent);
+    outline-offset: 2px;
+  }
+
+  .gf-button[data-variant='primary'] {
+    border-color: var(--gf-ink);
+    background: var(--gf-ink);
+    color: var(--gf-paper);
+  }
+
+  .gf-button[data-variant='primary']:hover {
+    background: color-mix(in oklch, var(--gf-ink) 86%, var(--gf-paper));
+  }
+
+  .gf[data-actions='cells'] .gf-actions {
+    align-items: stretch;
+    gap: var(--gf-line-width);
+    padding: 0;
+    background: var(--gf-line);
+  }
+
+  .gf[data-actions='cells'] .gf-button {
+    padding: calc(var(--gf-pad-y) * 1.4) var(--gf-pad-x);
+    border: 0;
+    border-radius: 0;
+    font-family: var(--gf-font-label);
+    font-size: var(--gf-label-size);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-align: start;
+    text-transform: uppercase;
+  }
+
+  .gf[data-actions='cells'] .gf-button[data-variant='primary'] {
+    flex: 1;
+    text-align: end;
+    background: var(--gf-accent);
+    color: var(--gf-paper);
+  }
+
+  .gf[data-actions='cells'] .gf-button[data-variant='primary']:hover {
+    background: color-mix(in oklch, var(--gf-accent) 88%, var(--gf-ink));
+  }
+
+  .gf[data-actions='cells'] .gf-button:focus-visible {
+    outline-color: var(--gf-paper);
+    outline-offset: -4px;
+  }
+
+  .gf[data-actions='cells']
+    .gf-button[data-variant='secondary']:focus-visible {
+    outline-color: var(--gf-accent);
+  }
+
+  /* ----------------------------------------------------------- filled mode */
+
+  /* A completed form: values in pen, empties as dashes, no chrome. */
+  .gf[data-mode='filled'] .gf-field {
+    cursor: default;
+  }
+
+  .gf[data-mode='filled'] .gf-field:hover,
+  .gf[data-mode='filled'] .gf-field:focus-within {
+    background: var(--gf-paper);
+    box-shadow: none;
+  }
+
+  .gf[data-mode='filled'] .gf-field:has(:focus-visible) {
+    background: var(--gf-paper-2);
+    box-shadow: inset 0 0 0 2px var(--gf-focus-color);
+  }
+
+  .gf[data-mode='filled'] .gf-label::after {
+    content: none;
+  }
+
+  .gf[data-mode='filled'] :is(.gf-input, .gf-select, .gf-choice) {
+    color: var(--gf-filled-ink);
+  }
+
+  .gf[data-mode='filled'] .gf-input::placeholder {
+    color: transparent;
+  }
+
+  .gf[data-mode='filled'] .gf-textarea {
+    resize: none;
+  }
+
+  .gf[data-mode='filled'] .gf-select-icon,
+  .gf[data-mode='filled'] .gf-select-value[data-placeholder] {
+    visibility: hidden;
+  }
+
+  .gf[data-mode='filled']
+    .gf-field:has(.gf-input:placeholder-shown, .gf-select[data-placeholder])::after {
+    content: '—';
+    content: '—' / '';
+    grid-area: control;
+    align-self: start;
+    color: var(--gf-faint);
+    font-size: var(--gf-input-size);
+    line-height: 1.4;
+    pointer-events: none;
+  }
+
+  /* Unselected options recede but stay readable (4.5:1). */
+  .gf[data-mode='filled'] .gf-choice:not(:has([data-checked])) {
+    color: var(--gf-muted);
+  }
+
+  .gf[data-mode='filled'] :is(.gf-radio, .gf-checkbox) {
+    border-color: var(--gf-faint);
+  }
+
+  .gf[data-mode='filled'] :is(.gf-radio, .gf-checkbox)[data-checked] {
+    border-color: var(--gf-filled-ink);
+  }
+
+  .gf[data-mode='filled'] :is(.gf-radio, .gf-checkbox)[data-checked] {
+    background: var(--gf-filled-ink);
+  }
+
+  .gf[data-mode='filled'] .gf-description {
+    display: none;
+  }
+
+  .gf[data-mode='filled'] .gf-textarea {
+    min-block-size: 0;
+    field-sizing: content;
+  }
+
+  .gf[data-mode='filled'] :is(.gf-stepper, .gf-scrub),
+  .gf[data-mode='filled'] .gf-select::before {
+    display: none;
+  }
+
+  /* ----------------------------------------------------------------- print */
+
+  @media print {
+    .gf,
+    .gf-popup {
+      --gf-paper: #fff;
+      --gf-paper-2: #f2f2f2;
+      --gf-line: #000;
+      --gf-ink: #000;
+      --gf-muted: #333;
+      --gf-faint: #999;
+      --gf-highlight: #fff;
+      --gf-hover: #fff;
+      --gf-danger-bg: #fff;
+    }
+
+    /*
+     * The hairlines are the form's background showing through 1px gaps, and
+     * radio dots are fills. Browsers skip backgrounds when printing unless
+     * told otherwise, which would erase both.
+     */
+    .gf {
+      border-radius: 0;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* Keep rows whole, and section headings with the row below them. */
+    .gf-row,
+    .gf-field {
+      break-inside: avoid;
+      box-shadow: none !important;
+    }
+
+    .gf-legend {
+      break-after: avoid;
+    }
+
+    .gf-actions {
+      display: none;
+    }
+
+    .gf-select-icon,
+    .gf-input::placeholder,
+    .gf-select-value[data-placeholder] {
+      visibility: hidden;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gf *,
+    .gf-popup {
+      transition: none;
+    }
+  }
+}
