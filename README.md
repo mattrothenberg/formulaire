@@ -33,6 +33,8 @@ Releases use [Changesets](https://github.com/changesets/changesets):
 
 1. Run `pnpm changeset` with your change, pick the bump and write one changelog line.
 2. Merge to `main`. The release workflow opens (or updates) a "Version packages" PR.
-3. Merge that PR. The workflow builds and publishes `formulaire-ui` to npm with provenance.
+3. Merge that PR. The release workflow's `stage` job then waits for approval of the `npm` environment in GitHub.
+4. Approve it. The job builds `formulaire-ui` and stages it on npm.
+5. Approve the staged version on npmjs.com (or `npm stage approve <id>`) with 2FA. That's what publishes it.
 
-Publishing uses npm [trusted publishing](https://docs.npmjs.com/trusted-publishers): npm trusts `release.yml` in this repo through OIDC, so there's no npm token in the repo's secrets.
+Publishing uses npm [trusted publishing](https://docs.npmjs.com/trusted-publishers), limited to [staged publishing](https://docs.npmjs.com/staged-publishing): npm trusts `release.yml` in this repo through OIDC, so there's no npm token in the repo's secrets, and nothing goes live without a maintainer's approval. See [SECURITY.md](SECURITY.md) for the full setup.

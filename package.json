@@ -10,8 +10,7 @@
     "typecheck": "pnpm -r typecheck",
     "format": "prettier --write .",
     "changeset": "changeset",
-    "version-packages": "changeset version",
-    "release": "pnpm build && changeset publish"
+    "version-packages": "changeset version"
   },
   "prettier": {
     "printWidth": 80,
