@@ -872,6 +872,11 @@ body.is-resizing {
   box-shadow: 0 1px 2px oklch(0% 0 0 / 0.06);
 }
 
+/* Tiles never get hover or focus, so show what those would reveal. */
+.bento .gf-stepper {
+  opacity: 1;
+}
+
 .bento-meta {
   display: flex;
   flex-wrap: wrap;
