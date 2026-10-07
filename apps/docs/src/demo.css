@@ -200,6 +200,18 @@ h1 span {
   text-transform: uppercase;
 }
 
+/* Base UI's mark inside its link: cap height, on the baseline. */
+.base-ui-link {
+  white-space: nowrap;
+}
+
+.base-ui-link svg {
+  height: 0.7em;
+  width: auto;
+  margin-right: 0.25em;
+  vertical-align: baseline;
+}
+
 .intro p {
   margin: 2.25rem 0 0;
   text-wrap: pretty;
