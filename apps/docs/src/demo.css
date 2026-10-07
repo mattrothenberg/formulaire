@@ -913,27 +913,11 @@ body.is-resizing {
   margin-top: 6rem;
 }
 
-/*
- * Drawn as a wireframe: cells take the page color so only the hairlines
- * remain, and each cell is annotated like the demo's X-ray (name · span).
- */
+/* Drawn as a wireframe: cells take the page color, so only hairlines remain. */
 .colophon .gf {
   --gf-filled-ink: var(--gf-ink);
   --gf-paper: var(--page);
   --gf-line: color-mix(in oklch, var(--ink) 22%, var(--page));
-}
-
-.colophon .gf-field::before {
-  content: attr(data-field) ' · ' attr(data-span) / '';
-  grid-area: error;
-  justify-self: end;
-  align-self: center;
-  color: var(--faint);
-  font-family: var(--mono);
-  font-size: var(--gf-label-size);
-  line-height: 1.3;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
 }
 
 .colophon .gf-row {
