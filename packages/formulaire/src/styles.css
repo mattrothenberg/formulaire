@@ -323,6 +323,32 @@
     opacity: 1;
   }
 
+  /*
+   * Autofill keeps the cell's look. Browsers paint autofilled inputs with
+   * their own background (applied with !important, so it's delayed out of
+   * existence instead), and password managers mark and tint the input.
+   * Being inside @layer, this !important beats an extension's unlayered one.
+   */
+  .gf-input:-webkit-autofill {
+    -webkit-text-fill-color: currentColor;
+    caret-color: currentColor;
+    transition:
+      background-color 0s 100000s,
+      color 0s 100000s;
+  }
+
+  .gf-input:autofill {
+    -webkit-text-fill-color: currentColor;
+    transition:
+      background-color 0s 100000s,
+      color 0s 100000s;
+  }
+
+  .gf-input:is([data-com-onepassword-filled], [data-lastpass-icon-root], [data-dashlane-rid]) {
+    background-color: transparent !important;
+    background-image: none !important;
+  }
+
   .gf-textarea {
     resize: vertical;
     min-block-size: calc(var(--gf-input-size) * 1.4 * 2);
