@@ -1,3 +1,13 @@
+/* Paper Mono v1.000 (SIL OFL 1.1, src/fonts/OFL.txt), self-hosted so Vite
+   fingerprints it. Variable: one file covers every weight. */
+@font-face {
+  font-family: 'Paper Mono';
+  src: url('./fonts/PaperMono.woff2') format('woff2');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --page: oklch(96.4% 0.003 106);
   --ink: oklch(21% 0.012 135);
@@ -8,9 +18,9 @@
   --well: oklch(93.6% 0.004 106);
   --paper: oklch(99.2% 0.004 90);
   --on-ink: oklch(97% 0.003 106);
-  /* Instrument Sans and Fragment Mono, from Google Fonts (index.html). */
+  /* Instrument Sans from Google Fonts (index.html); Paper Mono self-hosted. */
   --sans: 'Instrument Sans', system-ui, sans-serif;
-  --mono: 'Fragment Mono', ui-monospace, monospace;
+  --mono: 'Paper Mono', ui-monospace, monospace;
   color-scheme: light;
 }
 
