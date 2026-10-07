@@ -758,7 +758,7 @@ function App() {
               <dd>Matt Rothenberg</dd>
             </div>
             <div className="gf-field" data-span="2">
-              <dt className="gf-label">After</dt>
+              <dt className="gf-label">Inspired by</dt>
               <dd>
                 <a href="https://formkeep.com/gridforms">Gridforms</a> by
                 FormKeep
