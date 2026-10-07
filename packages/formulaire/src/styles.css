@@ -298,7 +298,11 @@
 
   /* -------------------------------------------------------------- controls */
 
-  .gf-control {
+  /* Plain HTML can skip gf-control: inputs and choice groups place
+     themselves. */
+  .gf-control,
+  .gf-input,
+  .gf-choices {
     grid-area: control;
   }
 
