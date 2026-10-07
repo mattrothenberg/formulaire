@@ -377,10 +377,10 @@ function App() {
         </h1>
         <p>
           A modern take on FormKeep's{' '}
-          <a href="https://formkeep.com/gridforms">Gridforms</a>: dense forms
-          laid out on a grid, with labels inside the cells and rows that wrap on
-          their own when space runs out. It's a CSS core that works on plain
-          HTML, plus React components built on{' '}
+          <a href="https://formkeep.com/gridforms">Gridforms</a>: the densest
+          forms you'll actually enjoy filling in. Labels live in the cells, rows
+          wrap on their own, and it works anywhere: one stylesheet for plain
+          HTML, or React components built on{' '}
           <a className="base-ui-link" href="https://base-ui.com">
             <svg viewBox="0 0 17 24" fill="currentColor" aria-hidden="true">
               <path d="M9.5001 7.01537C9.2245 6.99837 9 7.22385 9 7.49999V23C13.4183 23 17 19.4183 17 15C17 10.7497 13.6854 7.27351 9.5001 7.01537Z" />
