@@ -691,6 +691,7 @@ function App() {
         <CodeTabs
           className="source"
           maxHeight="14rem"
+          expandedMaxHeight="32rem"
           expandable
           value={codeLang}
           onValueChange={(id) => setCodeLang(id as 'react' | 'html')}
@@ -748,14 +749,41 @@ function App() {
         />
       </article>
 
+      {/* Plain .gf markup in filled mode: the CSS core, no React needed. */}
       <footer className="colophon">
-        <p>
-          Made by Matt Rothenberg, after{' '}
-          <a href="https://formkeep.com/gridforms">Gridforms</a> by FormKeep.
-        </p>
-        <p className="colophon-meta">
-          MIT · <a href={REPO_URL}>GitHub</a> · <a href={NPM_URL}>npm</a>
-        </p>
+        <div className="gf" data-mode="filled" data-density="compact">
+          <dl className="gf-row">
+            <div className="gf-field" data-span="2">
+              <dt className="gf-label">Made by</dt>
+              <dd>Matt Rothenberg</dd>
+            </div>
+            <div className="gf-field" data-span="2">
+              <dt className="gf-label">After</dt>
+              <dd>
+                <a href="https://formkeep.com/gridforms">Gridforms</a> by
+                FormKeep
+              </dd>
+            </div>
+          </dl>
+          <dl className="gf-row">
+            <div className="gf-field">
+              <dt className="gf-label">Source</dt>
+              <dd>
+                <a href={REPO_URL}>GitHub</a>
+              </dd>
+            </div>
+            <div className="gf-field">
+              <dt className="gf-label">Package</dt>
+              <dd>
+                <a href={NPM_URL}>npm</a>
+              </dd>
+            </div>
+            <div className="gf-field">
+              <dt className="gf-label">License</dt>
+              <dd>MIT</dd>
+            </div>
+          </dl>
+        </div>
       </footer>
 
     </main>
