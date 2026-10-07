@@ -302,6 +302,17 @@
     min-block-size: calc(var(--gf-input-size) * 1.4 * 2);
   }
 
+  /*
+   * Where supported, the textarea grows with its text instead of showing the
+   * browser's resize grip, which looks foreign on a cell. Others keep the grip.
+   */
+  @supports (field-sizing: content) {
+    .gf-textarea {
+      field-sizing: content;
+      resize: none;
+    }
+  }
+
   .gf-select {
     all: unset;
     grid-area: control;
