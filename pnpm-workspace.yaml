@@ -13,4 +13,3 @@ minimumReleaseAge: 4320
 allowBuilds:
   esbuild: false
   workerd: false
-  workerd: set this to true or false
