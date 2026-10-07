@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { createHighlighter, type Highlighter } from 'shiki/bundle/web';
-import { createJavaScriptRegexEngine } from 'shiki/engine/javascript';
+import type { HighlighterCore } from 'shiki/core';
 
 export type Lang = 'tsx' | 'html' | 'bash';
 
@@ -71,13 +70,27 @@ const darkTheme = makeTheme('formulaire-dark', 'dark', {
   value: '#eab27a',
 });
 
-let highlighter: Promise<Highlighter> | null = null;
+/*
+ * Fine-grained Shiki, loaded on demand: only the three languages the site
+ * shows, our own themes, and the JavaScript regex engine (no WebAssembly).
+ * The page renders first; highlighting arrives in its own small chunks.
+ */
+let highlighter: Promise<HighlighterCore> | null = null;
 const getHighlighter = () =>
-  (highlighter ??= createHighlighter({
-    themes: [lightTheme, darkTheme],
-    langs: ['tsx', 'html', 'bash'],
-    engine: createJavaScriptRegexEngine(),
-  }));
+  (highlighter ??= Promise.all([
+    import('shiki/core'),
+    import('shiki/engine/javascript'),
+  ]).then(([{ createHighlighterCore }, { createJavaScriptRegexEngine }]) =>
+    createHighlighterCore({
+      themes: [lightTheme, darkTheme],
+      langs: [
+        import('shiki/langs/tsx.mjs'),
+        import('shiki/langs/html.mjs'),
+        import('shiki/langs/bash.mjs'),
+      ],
+      engine: createJavaScriptRegexEngine(),
+    })
+  ));
 
 export function useHighlighted(code: string, lang: Lang) {
   const [html, setHtml] = React.useState<string | null>(null);
