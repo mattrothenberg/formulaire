@@ -691,6 +691,11 @@ body.is-resizing {
   pointer-events: none;
 }
 
+/* An error message owns the label row's trailing slot; the tag steps aside. */
+.stage[data-xray] .gf-field[data-invalid]::before {
+  content: none;
+}
+
 .stage[data-xray] .gf-legend::after {
   content: 'Section';
   float: right;
