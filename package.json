@@ -10,7 +10,8 @@
     "typecheck": "pnpm -r typecheck",
     "format": "prettier --write .",
     "changeset": "changeset",
-    "version-packages": "changeset version"
+    "version-packages": "changeset version",
+    "test": "pnpm --filter formulaire-ui test"
   },
   "prettier": {
     "printWidth": 80,

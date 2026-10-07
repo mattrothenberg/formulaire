@@ -26,6 +26,10 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
+      # Component and axe accessibility tests run in real Chromium. The
+      # browser build is the one pinned by the exact playwright version.
+      - run: pnpm --filter formulaire-ui exec playwright install --with-deps chromium
+      - run: pnpm test
       # tsdown runs publint and are-the-types-wrong on the built package.
       - run: pnpm build
       - run: pnpm build:docs
