@@ -601,14 +601,15 @@
     outline-offset: 2px;
   }
 
+  /* The primary action carries the accent, the same as in the cells style. */
   .gf-button[data-variant='primary'] {
-    border-color: var(--gf-ink);
-    background: var(--gf-ink);
+    border-color: var(--gf-accent);
+    background: var(--gf-accent);
     color: var(--gf-paper);
   }
 
   .gf-button[data-variant='primary']:hover {
-    background: color-mix(in oklch, var(--gf-ink) 86%, var(--gf-paper));
+    background: color-mix(in oklch, var(--gf-accent) 88%, var(--gf-ink));
   }
 
   .gf[data-actions='cells'] .gf-actions {
