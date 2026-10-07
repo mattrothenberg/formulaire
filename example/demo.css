@@ -231,7 +231,7 @@ h1 span {
  */
 .demo-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 13.5rem;
+  grid-template-columns: minmax(0, 1fr) 15rem;
   align-items: start;
   gap: 3rem;
 }
@@ -248,6 +248,18 @@ h1 span {
   gap: 0.5rem;
 }
 
+.control-note {
+  color: var(--faint);
+  font-size: 0.875rem;
+  line-height: 1.35;
+}
+
+/* X-ray is a tool, not a style option: set it apart. */
+.control-inspect {
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+
 .control-label {
   color: var(--faint);
   font-family: var(--mono);
@@ -262,12 +274,16 @@ h1 span {
     gap: 2rem;
   }
 
+  /* The form comes first on narrow screens; the controls follow it. */
   .controls {
     position: static;
-    order: -1;
     display: flex;
     flex-wrap: wrap;
     gap: 1.25rem 2rem;
+  }
+  .control-inspect {
+    padding-top: 0;
+    border-top: 0;
   }
 }
 

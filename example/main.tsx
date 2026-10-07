@@ -61,6 +61,10 @@ const states = ['CA', 'NY', 'OR', 'TX', 'WA'].map((s) => ({
 const MIN_WIDTH = 320;
 const MAX_WIDTH = 1088;
 
+// One-click widths, so "no breakpoints" shows without finding the handles.
+const WIDTHS = { sidebar: 340, half: 600 } as const;
+type WidthPreset = 'sidebar' | 'half' | 'full';
+
 type Theme = 'system' | 'light' | 'dark';
 type Focus = 'fill' | 'ring' | 'underline';
 type ActionsStyle = 'bar' | 'cells';
@@ -398,13 +402,24 @@ function App() {
                 pendingPeek.current = name;
                 peekTimer.current = window.setTimeout(() => showPeek(cell), 400);
               }}
-              onPointerLeave={() => {
+              onPointerLeave={(event) => {
+                // A lifted finger "leaves" too; touch peeks close on a second tap.
+                if (event.pointerType === 'touch') return;
                 quietCell.current = null;
                 hidePeek();
               }}
               onPointerDown={(event) => {
+                if (event.pointerType === 'touch') return;
                 quietCell.current = cellOf(event.target)?.dataset.field ?? null;
                 hidePeek();
+              }}
+              onPointerUp={(event) => {
+                // Touch has no hover: a tap peeks, a second tap closes.
+                if (!xray || event.pointerType !== 'touch') return;
+                const cell = cellOf(event.target);
+                if (!cell?.dataset.field) return;
+                if (cell.dataset.field === peek?.name) hidePeek();
+                else showPeek(cell);
               }}
             >
               <output className="width-tag" aria-live="polite">
@@ -553,6 +568,27 @@ function App() {
           </div>
           <aside className="controls" aria-label="Configure the demo">
             <div className="control">
+              <span className="control-label">Width</span>
+              <Segmented<WidthPreset>
+                label="Width"
+                value={
+                  stageWidth === null ? 'full'
+                  : stageWidth === WIDTHS.sidebar ? 'sidebar'
+                  : stageWidth === WIDTHS.half ? 'half'
+                  : null
+                }
+                options={[
+                  { value: 'sidebar', label: 'Sidebar' },
+                  { value: 'half', label: 'Half' },
+                  { value: 'full', label: 'Full' },
+                ]}
+                onChange={(value) =>
+                  setStageWidth(value === 'full' ? null : WIDTHS[value])
+                }
+              />
+              <span className="control-note">or drag the form's edges</span>
+            </div>
+            <div className="control">
               <span className="control-label">Mode</span>
               <Segmented
                 label="Mode"
@@ -619,7 +655,8 @@ function App() {
                 ))}
               </div>
             </div>
-            <div className="control">
+            {/* A tool for reading the code, not a style option. */}
+            <div className="control control-inspect">
               <span className="control-label">X-ray</span>
               <Segmented
                 label="X-ray"
@@ -633,6 +670,9 @@ function App() {
                   if (value === 'off') hidePeek();
                 }}
               />
+              <span className="control-note">
+                Tags each cell, and shows its code on hover or tap
+              </span>
             </div>
           </aside>
         </div>
@@ -643,7 +683,6 @@ function App() {
           maxHeight="26rem"
           value={codeLang}
           onValueChange={(id) => setCodeLang(id as 'react' | 'html')}
-          hint="Turn on X-ray, then hover a field to peek at its code"
           tabs={[
             { id: 'react', label: 'React', lang: 'tsx', code: tsx },
             { id: 'html', label: 'HTML', lang: 'html', code: html },
