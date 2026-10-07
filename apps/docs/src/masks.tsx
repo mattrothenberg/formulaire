@@ -5,7 +5,7 @@ import type { MaskitoOptions } from '@maskito/core';
 import { maskitoPhone } from '@maskito/phone';
 import { useMaskito } from '@maskito/react';
 import metadata from 'libphonenumber-js/min/metadata';
-import { GridForm, type InputProps } from '../src';
+import { GridForm, type InputProps } from 'formulaire-ui';
 
 // (212) 343-3355. Options live at module scope so useMaskito doesn't
 // rebuild the mask on every render.

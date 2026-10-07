@@ -1,3 +1,7 @@
+packages:
+  - packages/*
+  - apps/*
+
 # Refuse to resolve any dependency version published less than 3 days ago.
 # Supply-chain worms (Shai-Hulud etc.) are usually detected and unpublished
 # within hours, so this keeps freshly-poisoned releases out of the tree.

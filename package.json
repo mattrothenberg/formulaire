@@ -1,44 +1,17 @@
 {
-  "name": "formulaire-ui",
-  "version": "0.0.0",
-  "description": "Dense, paper-style grid forms. A CSS core plus React components built on Base UI.",
-  "author": "Matt Rothenberg",
-  "license": "MIT",
+  "name": "formulaire-monorepo",
+  "private": true,
   "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.cts",
-  "exports": {
-    ".": {
-      "import": {
-        "types": "./dist/index.d.mts",
-        "default": "./dist/index.mjs"
-      },
-      "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
-    },
-    "./styles.css": "./dist/styles.css",
-    "./package.json": "./package.json"
-  },
-  "files": [
-    "dist"
-  ],
-  "sideEffects": [
-    "*.css"
-  ],
+  "packageManager": "pnpm@12.3.4",
   "scripts": {
-    "build": "tsdown && cp src/styles.css dist/styles.css",
-    "typecheck": "tsc --noEmit",
-    "example": "vite example",
-    "example:build": "vite build example",
-    "format": "prettier --write ."
-  },
-  "peerDependencies": {
-    "@base-ui/react": "^1.0.0",
-    "react": ">=19",
-    "react-dom": ">=19"
+    "dev": "pnpm --filter @formulaire/docs dev",
+    "build": "pnpm --filter formulaire-ui build",
+    "build:docs": "pnpm --filter @formulaire/docs build",
+    "typecheck": "pnpm -r typecheck",
+    "format": "prettier --write .",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "pnpm build && changeset publish"
   },
   "prettier": {
     "printWidth": 80,
@@ -47,21 +20,8 @@
     "trailingComma": "es5"
   },
   "devDependencies": {
-    "@base-ui/react": "^1.0.0",
-    "@maskito/core": "^5.6.0",
-    "@maskito/kit": "^5.6.0",
-    "@maskito/phone": "^5.6.0",
-    "@maskito/react": "^5.6.0",
-    "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0",
-    "@vitejs/plugin-react": "^6.1.1",
-    "libphonenumber-js": "^1.13.14",
+    "@changesets/cli": "^3.0.3",
     "prettier": "^3.9.9",
-    "react": ">=19",
-    "react-dom": ">=19",
-    "shiki": "^4.5.0",
-    "tsdown": "^0.23.0",
-    "typescript": "^7.0.2",
-    "vite": "^8.3.2"
+    "typescript": "^7.0.2"
   }
 }

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { GridForm } from '../src';
+import { GridForm } from 'formulaire-ui';
 
 // Each tile renders the real component, small and inert.
 

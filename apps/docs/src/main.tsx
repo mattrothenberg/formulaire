@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
-import { GridForm, type Density, type Mode } from '../src';
-import '../src/styles.css';
+import { GridForm, type Density, type Mode } from 'formulaire-ui';
+import 'formulaire-ui/styles.css';
 import { CodePeek, CodeTabs, Command } from './code';
 import { Mark } from './mark';
 import { ComponentBento } from './bento';

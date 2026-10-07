@@ -1,61 +1,32 @@
-# formulaire
+# Formulaire
 
-Forms on a grid. A modern take on FormKeep's [Gridforms](https://formkeep.com/gridforms). A CSS core that works on plain HTML, and React components built on [Base UI](https://base-ui.com).
+Forms on a grid. A modern take on FormKeep's [Gridforms](https://formkeep.com/gridforms).
 
-> *Formulaire* is French for form, the paper kind you fill out at the post office.
+This is the monorepo. The library's own docs live in [`packages/formulaire`](packages/formulaire/README.md).
 
-```tsx
-import { GridForm } from 'formulaire-ui';
-import 'formulaire-ui/styles.css';
-
-<GridForm.Root mode="edit" density="comfortable" onFormSubmit={save}>
-  <GridForm.Section legend="Customer">
-    <GridForm.Row>
-      <GridForm.Field name="name" label="Full name" span={2}>
-        <GridForm.Input required />
-      </GridForm.Field>
-      <GridForm.Field name="stock" label="Film stock">
-        <GridForm.Select items={stocks} />
-      </GridForm.Field>
-    </GridForm.Row>
-  </GridForm.Section>
-</GridForm.Root>;
-```
-
-## Ideas
-
-- **Container-adaptive, no breakpoints.** A cell asks for `span × --gf-min-col`, and a row wraps when the container can't fit it.
-- **Edit and filled modes.** `mode="filled"` renders the same form read-only, like a completed document, with dashes for empty fields.
-- **Errors inside the cell.** Short validation messages sit beside the label, so the layout never shifts.
-- **Base UI underneath.** Field, Form, Fieldset, Select, Radio and Checkbox handle labelling, validation and focus state.
-- **Plain HTML works too.** `.gf > .gf-section > .gf-row > .gf-field[data-span]`.
-- **Themeable.** Everything is a `--gf-*` custom property inside `@layer formulaire`.
-
-## Input masks
-
-Formulaire doesn't bundle a mask library. `GridForm.Input` passes its `ref` straight to the `<input>`, so any ref-based masker works. [Maskito](https://maskito.dev) handles the cursor position, pasting and undo well, and `@maskito/phone` formats numbers by country:
-
-```tsx
-import { maskitoPhone } from '@maskito/phone';
-import { useMaskito } from '@maskito/react';
-import metadata from 'libphonenumber-js/min/metadata';
-
-// Module scope, so the mask isn't rebuilt on every render.
-const phoneMask = maskitoPhone({ countryIsoCode: 'US', metadata, format: 'NATIONAL' });
-
-function PhoneInput(props: InputProps) {
-  const ref = useMaskito({ options: phoneMask });
-  return <GridForm.Input ref={ref} type="tel" autoComplete="tel" {...props} />;
-}
-```
-
-Call `useMaskito` in the same component as the input. If the hook lives in a parent and the input remounts, Maskito drops the mask.
+| Path | What | Published |
+|---|---|---|
+| `packages/formulaire` | The library: CSS core plus React components on Base UI | `formulaire-ui` on npm |
+| `apps/docs` | The landing page and live demo (Vite) | No |
 
 ## Develop
 
 ```sh
 pnpm install
-pnpm example     # demo app
-pnpm build       # dist/ (ESM, CJS, types, styles.css)
-pnpm typecheck
+pnpm dev          # docs site on http://localhost:5317
+pnpm build        # library: dist/ (ESM, CJS, types, styles.css)
+pnpm build:docs   # static docs site in apps/docs/dist
+pnpm typecheck    # every package
 ```
+
+The docs site imports the library's source through Vite aliases (`apps/docs/vite.config.ts`), so edits in `packages/formulaire/src` hot-reload without a build. The library build runs [publint](https://publint.dev) and [are-the-types-wrong](https://arethetypeswrong.github.io) and fails on type resolution problems.
+
+## Releasing
+
+Releases use [Changesets](https://github.com/changesets/changesets):
+
+1. Run `pnpm changeset` with your change, pick the bump and write one changelog line.
+2. Merge to `main`. The release workflow opens (or updates) a "Version packages" PR.
+3. Merge that PR. The workflow builds and publishes `formulaire-ui` to npm with provenance.
+
+The release workflow needs an `NPM_TOKEN` repository secret.

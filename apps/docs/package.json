@@ -1,0 +1,31 @@
+{
+  "name": "@formulaire/docs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5317",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.8.0",
+    "@maskito/core": "^5.6.0",
+    "@maskito/kit": "^5.6.0",
+    "@maskito/phone": "^5.6.0",
+    "@maskito/react": "^5.6.0",
+    "formulaire-ui": "workspace:*",
+    "libphonenumber-js": "^1.13.14",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "shiki": "^4.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.2"
+  }
+}

@@ -1,5 +1,4 @@
 {
-  "include": ["src", "example"],
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
