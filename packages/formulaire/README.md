@@ -1,6 +1,8 @@
-# formulaire
+<img src="https://raw.githubusercontent.com/mattrothenberg/formulaire/main/apps/docs/public/favicon.svg" width="64" height="64" alt="">
 
-Forms on a grid. A modern take on FormKeep's [Gridforms](https://formkeep.com/gridforms). A CSS core that works on plain HTML, and React components built on [Base UI](https://base-ui.com).
+# Formulaire
+
+A modern take on FormKeep's [Gridforms](https://formkeep.com/gridforms): the densest forms you'll actually enjoy filling in. Labels live in the cells, rows wrap on their own, and it works anywhere: one stylesheet for plain HTML, or React components built on [Base UI](https://base-ui.com).
 
 > *Formulaire* is French for form, the paper kind you fill out at the post office.
 

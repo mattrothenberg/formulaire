@@ -1,6 +1,12 @@
+<img src="apps/docs/public/favicon.svg" width="64" height="64" alt="">
+
 # Formulaire
 
-Forms on a grid. A modern take on FormKeep's [Gridforms](https://formkeep.com/gridforms).
+A modern take on FormKeep's [Gridforms](https://formkeep.com/gridforms): the densest forms you'll actually enjoy filling in. Labels live in the cells, rows wrap on their own, and it works anywhere: one stylesheet for plain HTML, or React components built on [Base UI](https://base-ui.com).
+
+```sh
+npm install formulaire-ui @base-ui/react
+```
 
 This is the monorepo. The library's own docs live in [`packages/formulaire`](packages/formulaire/README.md).
 
@@ -29,4 +35,4 @@ Releases use [Changesets](https://github.com/changesets/changesets):
 2. Merge to `main`. The release workflow opens (or updates) a "Version packages" PR.
 3. Merge that PR. The workflow builds and publishes `formulaire-ui` to npm with provenance.
 
-The release workflow needs an `NPM_TOKEN` repository secret.
+Publishing uses npm [trusted publishing](https://docs.npmjs.com/trusted-publishers): npm trusts `release.yml` in this repo through OIDC, so there's no npm token in the repo's secrets.
