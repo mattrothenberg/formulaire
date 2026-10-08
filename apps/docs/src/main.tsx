@@ -714,8 +714,8 @@ function App() {
         <h2>Edit and filled</h2>
         <p>
           Set <code>mode="filled"</code> and the form renders as a completed
-          document, for review steps, receipts and admin views. Values read
-          like pen on paper, and empty fields get a dash. It prints well, too.
+          document, for review steps, receipts and admin views. It prints
+          well, too.
         </p>
 
       </article>
