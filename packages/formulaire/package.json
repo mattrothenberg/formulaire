@@ -1,6 +1,6 @@
 {
   "name": "formulaire-ui",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A modern take on FormKeep's Gridforms: a CSS core for plain HTML, plus React components built on Base UI.",
   "author": "Matt Rothenberg",
   "license": "MIT",

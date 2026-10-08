@@ -1,5 +1,16 @@
 # formulaire-ui
 
+## 0.3.0
+
+### Minor Changes
+
+- 45d5714: Two focus styles that differ only in where the line goes: along the bottom (default) or all round with `data-focus="ring"`. Both tint the cell. The `underline` style, which dropped the tint, is gone.
+- c1cf814: Removes the `data-actions="cells"` button style. `GridForm.Actions` always renders as a right-aligned footer bar.
+
+### Patch Changes
+
+- 3448525: In plain HTML, `.gf-input` and `.gf-choices` sit under their label without the `gf-control` class. Before, a control without it landed beside the label.
+
 ## 0.2.0
 
 ### Minor Changes
