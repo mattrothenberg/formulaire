@@ -1149,3 +1149,58 @@ body.is-resizing {
   font-family: var(--mono);
   font-size: 0.875rem;
 }
+
+/* ---------------------------------------------------------------- styles */
+
+.recipe {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 5rem;
+}
+
+.recipe-text {
+  justify-self: center;
+  width: min(var(--col), 100%);
+}
+
+.recipe h2 {
+  margin: 0;
+  color: var(--faint);
+  font-size: inherit;
+  font-weight: 500;
+}
+
+.recipe p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.token-table {
+  width: 100%;
+  margin-top: 1.25rem;
+  border-collapse: collapse;
+  font-size: 1rem;
+}
+
+.token-table th {
+  padding: 0 0 0.5rem;
+  color: var(--muted);
+  font-weight: 500;
+  text-align: left;
+}
+
+.token-table td {
+  padding: 0.625rem 1rem 0.625rem 0;
+  border-top: 1px solid var(--rule);
+  vertical-align: baseline;
+}
+
+.token-table td:last-child {
+  padding-right: 0;
+  color: var(--muted);
+}
+
+.token-table code {
+  font-size: 0.875rem;
+  white-space: nowrap;
+}

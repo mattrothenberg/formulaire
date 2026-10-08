@@ -97,14 +97,31 @@ function Root({
 export interface SectionProps
   extends Omit<React.ComponentProps<typeof Fieldset.Root>, 'className'> {
   legend?: React.ReactNode;
+  /** Passed to the legend: className, style (e.g. --gf-legend-* tokens), render. */
+  legendProps?: Omit<
+    React.ComponentProps<typeof Fieldset.Legend>,
+    'children' | 'className'
+  > & { className?: string };
   className?: string;
 }
 
-function Section({ legend, className, children, ...props }: SectionProps) {
+function Section({
+  legend,
+  legendProps,
+  className,
+  children,
+  ...props
+}: SectionProps) {
+  const { className: legendClassName, ...restLegendProps } = legendProps ?? {};
   return (
     <Fieldset.Root className={cx('gf-section', className)} {...props}>
       {legend != null && (
-        <Fieldset.Legend className="gf-legend">{legend}</Fieldset.Legend>
+        <Fieldset.Legend
+          className={cx('gf-legend', legendClassName)}
+          {...restLegendProps}
+        >
+          {legend}
+        </Fieldset.Legend>
       )}
       {children}
     </Fieldset.Root>

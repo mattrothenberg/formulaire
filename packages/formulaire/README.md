@@ -45,6 +45,35 @@ import 'formulaire-ui/styles.css';
 - **Plain HTML works too.** `.gf > .gf-section > .gf-row > .gf-field[data-span]`.
 - **Themeable.** Everything is a `--gf-*` custom property inside `@layer formulaire`.
 
+## Styling
+
+Formulaire ships one look and keeps every visual choice in a `--gf-*` custom property. Set tokens on the form, a section or a single legend, from your own CSS (it sits outside `@layer formulaire`, so it wins) or from React:
+
+```css
+/* Section titles as headings over a heavy rule, instead of the tinted band. */
+.heading {
+  --gf-legend-font: var(--gf-font);
+  --gf-legend-size: calc(var(--gf-input-size) * 1.0625);
+  --gf-legend-weight: 650;
+  --gf-legend-tracking: normal;
+  --gf-legend-case: none;
+  --gf-legend-bg: var(--gf-paper);
+  --gf-legend-rule: 3px;
+}
+```
+
+```tsx
+<GridForm.Root className="heading">…</GridForm.Root>
+
+// Or one legend: legendProps go to Base UI's Fieldset.Legend.
+<GridForm.Section
+  legend="Shipping"
+  legendProps={{ style: { '--gf-legend-rule': '3px' } as React.CSSProperties }}
+/>
+```
+
+More recipes, including a rebuild of the original Gridforms look, are on the [Styles page](https://formulaire.mattrothenberg.com/styles).
+
 ## Input masks
 
 Formulaire doesn't bundle a mask library. `GridForm.Input` passes its `ref` straight to the `<input>`, so any ref-based masker works. [Maskito](https://maskito.dev) handles the cursor position, pasting and undo well, and `@maskito/phone` formats numbers by country:

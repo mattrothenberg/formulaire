@@ -35,6 +35,19 @@
     --gf-label-gap: 0.25rem;
     --gf-label-size: 0.6875rem;
     --gf-input-size: 1rem;
+
+    /* Section legends: a tinted band by default. Set a rule for a heading. */
+    --gf-legend-font: var(--gf-font-label);
+    --gf-legend-size: var(--gf-label-size);
+    --gf-legend-weight: 600;
+    --gf-legend-tracking: 0.08em;
+    --gf-legend-case: uppercase;
+    --gf-legend-bg: var(--gf-paper-2);
+    --gf-legend-color: var(--gf-ink);
+    --gf-legend-pad-top: calc(var(--gf-pad-y) * 0.9);
+    --gf-legend-pad-bottom: calc(var(--gf-pad-y) * 0.9);
+    --gf-legend-rule: 0px;
+    --gf-legend-rule-color: var(--gf-ink);
   }
 
   @media (prefers-color-scheme: dark) {
@@ -112,15 +125,24 @@
     min-inline-size: 0;
   }
 
+  /*
+   * A native <legend> is drawn in the fieldset's border and shrink-wraps.
+   * Floating it opts out of that, so it's an ordinary full-width flex item.
+   */
   .gf-legend {
-    padding: calc(var(--gf-pad-y) * 0.9) var(--gf-pad-x);
-    background: var(--gf-paper-2);
-    color: var(--gf-ink);
-    font-family: var(--gf-font-label);
-    font-size: var(--gf-label-size);
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    float: left;
+    inline-size: 100%;
+    padding: var(--gf-legend-pad-top) var(--gf-pad-x) var(--gf-legend-pad-bottom);
+    /* A rule replaces the hairline gap under the legend rather than stacking on it. */
+    margin-block-end: calc(-1 * min(var(--gf-legend-rule), var(--gf-line-width)));
+    border-block-end: var(--gf-legend-rule) solid var(--gf-legend-rule-color);
+    background: var(--gf-legend-bg);
+    color: var(--gf-legend-color);
+    font-family: var(--gf-legend-font);
+    font-size: var(--gf-legend-size);
+    font-weight: var(--gf-legend-weight);
+    letter-spacing: var(--gf-legend-tracking);
+    text-transform: var(--gf-legend-case);
   }
 
   /*
