@@ -83,7 +83,7 @@ const WIDTHS = { sidebar: 340, half: 600 } as const;
 type WidthPreset = 'sidebar' | 'half' | 'full';
 
 type Theme = 'system' | 'light' | 'dark';
-type Focus = 'fill' | 'ring' | 'underline';
+type Focus = 'bottom' | 'ring';
 type Accent = 'blue' | 'red' | 'green' | 'graphite';
 
 const accents: Array<{ value: Accent; label: string }> = [
@@ -290,7 +290,6 @@ function ThemeToggle({
 function App() {
   const [mode, setMode] = React.useState<Mode>('edit');
   const [density, setDensity] = React.useState<Density>('comfortable');
-  const [focus, setFocus] = React.useState<Focus>('fill');
   const [accent, setAccent] = React.useState<Accent>('blue');
   const [theme, setTheme] = React.useState<Theme>('system');
   const [stageWidth, setStageWidth] = React.useState<number | null>(null);
@@ -358,6 +357,7 @@ function App() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [peek]);
 
+  const [focus, setFocus] = React.useState<Focus>('bottom');
   const rootOptions = { mode, density, focus };
   const tsx = demoTsx(rootOptions);
   const html = demoHtml(rootOptions);
@@ -449,7 +449,7 @@ function App() {
                 key={formKey}
                 mode={mode}
                 density={density}
-                data-focus={focus}
+                data-focus={focus === 'ring' ? 'ring' : undefined}
                 onFormSubmit={(values) => {
                   setSubmitted(values);
                   setMode('filled');
@@ -636,9 +636,8 @@ function App() {
                 label="Focus"
                 value={focus}
                 options={[
-                  { value: 'fill', label: 'Fill' },
+                  { value: 'bottom', label: 'Bottom' },
                   { value: 'ring', label: 'Ring' },
-                  { value: 'underline', label: 'Line' },
                 ]}
                 onChange={setFocus}
               />

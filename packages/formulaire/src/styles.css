@@ -163,10 +163,7 @@
   .gf-field[data-span='5'] { --gf-span: 5; }
   .gf-field[data-span='6'] { --gf-span: 6; }
 
-  /*
-   * Focus indicator, set with data-focus on .gf:
-   * fill (default), ring (a spreadsheet-style active cell), underline.
-   */
+  /* Focus indicator color: the accent, or the danger color when invalid. */
   .gf-field {
     --gf-focus-color: var(--gf-accent);
   }
@@ -185,9 +182,10 @@
 
   /*
    * The tint alone is too faint to count as a focus indicator (WCAG 1.4.11
-   * asks for 3:1), so every style also draws a 2px line or ring in the
-   * focus color. A cell also stays active while its Select menu is open or
-   * closing (data-menu-active), since focus is in the menu, outside the cell.
+   * asks for 3:1), so a 2px line in the focus color carries it: along the
+   * bottom by default, or all round with data-focus="ring" on .gf. A cell
+   * also stays active while its Select menu is open or closing
+   * (data-menu-active), since focus is in the menu, outside the cell.
    */
   .gf-field:is(:focus-within, :has([data-menu-active])) {
     background: var(--gf-highlight);
@@ -201,15 +199,6 @@
   .gf[data-focus='ring'] .gf-field:is(:focus-within, :has([data-menu-active])) {
     box-shadow: inset 0 0 0 2px var(--gf-focus-color);
   }
-
-  .gf[data-focus='underline'] .gf-field:is(:focus-within, :has([data-menu-active])) {
-    background: var(--gf-paper);
-  }
-
-  .gf[data-focus='underline'] .gf-field[data-invalid]:is(:focus-within, :has([data-menu-active])) {
-    background: var(--gf-danger-bg);
-  }
-
 
   .gf-field[data-disabled] {
     cursor: not-allowed;
