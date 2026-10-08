@@ -10,7 +10,7 @@ export function demoTsx({ mode, density, focus }: RootOptions) {
   const props = [
     mode !== 'edit' && `mode="${mode}"`,
     density !== 'comfortable' && `density="${density}"`,
-    focus !== 'fill' && `data-focus="${focus}"`,
+    focus === 'ring' && 'data-focus="ring"',
     'onFormSubmit={placeOrder}',
   ].filter(Boolean);
 
@@ -108,7 +108,7 @@ export function demoHtml({ mode, density, focus }: RootOptions) {
     'class="gf"',
     mode !== 'edit' && `data-mode="${mode}"`,
     density !== 'comfortable' && `data-density="${density}"`,
-    focus !== 'fill' && `data-focus="${focus}"`,
+    focus === 'ring' && 'data-focus="ring"',
   ].filter(Boolean);
 
   return `<link rel="stylesheet" href="formulaire-ui/styles.css">
