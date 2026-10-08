@@ -386,8 +386,7 @@ function App() {
         <p>
           A modern take on FormKeep's{' '}
           <a href="https://formkeep.com/gridforms">Gridforms</a>: the densest
-          forms you'll actually enjoy filling in. Labels live in the cells, rows
-          wrap on their own, and it works anywhere: one stylesheet for plain
+          forms you'll actually enjoy filling in. Use one stylesheet for plain
           HTML, or React components built on{' '}
           <a className="base-ui-link" href="https://base-ui.com">
             <svg viewBox="0 0 17 24" fill="currentColor" aria-hidden="true">
@@ -707,8 +706,7 @@ function App() {
         <h2>Adapts to its container</h2>
         <p>
           There are no breakpoints. Each cell asks for its span times a minimum
-          column width, and a row wraps when the container can't fit it. The
-          same form works in a sidebar and across a full page.
+          column width, and a row wraps when the container can't fit it.
         </p>
 
         <h2>Edit and filled</h2>

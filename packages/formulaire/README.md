@@ -2,7 +2,7 @@
 
 # Formulaire
 
-A modern take on FormKeep's [Gridforms](https://formkeep.com/gridforms): the densest forms you'll actually enjoy filling in. Labels live in the cells, rows wrap on their own, and it works anywhere: one stylesheet for plain HTML, or React components built on [Base UI](https://base-ui.com).
+A modern take on FormKeep's [Gridforms](https://formkeep.com/gridforms): the densest forms you'll actually enjoy filling in. Use one stylesheet for plain HTML, or React components built on [Base UI](https://base-ui.com).
 
 > *Formulaire* is French for form, the paper kind you fill out at the post office.
 
