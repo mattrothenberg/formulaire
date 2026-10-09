@@ -4,6 +4,7 @@ import { GridForm, type Density, type Mode } from 'formulaire-ui';
 import 'formulaire-ui/styles.css';
 import { CodePeek, CodeTabs, Command, Snippet } from './code';
 import { Mark } from './mark';
+import { ThemeToggle, type Theme } from './theme';
 import { ComponentBento } from './bento';
 import { MaskedInput, phoneMask, zipMask } from './masks';
 import { demoHtml, demoTsx, fieldSnippet, installCode } from './source';
@@ -82,7 +83,6 @@ const MAX_WIDTH = 1088;
 const WIDTHS = { sidebar: 340, half: 600 } as const;
 type WidthPreset = 'sidebar' | 'half' | 'full';
 
-type Theme = 'system' | 'light' | 'dark';
 type Focus = 'bottom' | 'ring';
 type Accent = 'blue' | 'red' | 'green' | 'graphite';
 
@@ -246,47 +246,6 @@ const usageHtml = `<form class="gf">
   </fieldset>
 </form>`;
 
-function ThemeToggle({
-  theme,
-  onChange,
-}: {
-  theme: Theme;
-  onChange: (theme: Theme) => void;
-}) {
-  // Starts on the system theme; one click flips to the other one.
-  const dark =
-    theme === 'dark' ||
-    (theme === 'system' &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches);
-
-  return (
-    <button
-      type="button"
-      className="theme-toggle"
-      aria-label={dark ? 'Switch to light theme' : 'Switch to dark theme'}
-      title={dark ? 'Light' : 'Dark'}
-      onClick={() => onChange(dark ? 'light' : 'dark')}
-    >
-      <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true">
-        {dark ? (
-          <g fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-            <circle cx="10" cy="10" r="3.5" />
-            <path d="M10 2v1.5M10 16.5V18M2 10h1.5M16.5 10H18M4.3 4.3l1.1 1.1M14.6 14.6l1.1 1.1M4.3 15.7l1.1-1.1M14.6 5.4l1.1-1.1" />
-          </g>
-        ) : (
-          <path
-            d="M16.5 12.2A7 7 0 0 1 7.8 3.5a7 7 0 1 0 8.7 8.7Z"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinejoin="round"
-          />
-        )}
-      </svg>
-    </button>
-  );
-}
-
 function App() {
   const [mode, setMode] = React.useState<Mode>('edit');
   const [density, setDensity] = React.useState<Density>('comfortable');
@@ -374,6 +333,9 @@ function App() {
       <header className="masthead wide">
         <nav className="masthead-nav">
           <ThemeToggle theme={theme} onChange={setTheme} />
+          <a className="masthead-link" href="/styles">
+            Styles
+          </a>
           <a className="masthead-link" href={REPO_URL}>
             GitHub
           </a>
@@ -743,7 +705,9 @@ function App() {
         <p className="ways-note">
           Both use the same classes and <code>--gf-*</code> variables, inside{' '}
           <code>@layer formulaire</code>, so any CSS of yours wins. Density,
-          focus style and filled mode are data attributes on the form.
+          focus style and filled mode are data attributes on the form. For
+          other looks, start from a recipe on the{' '}
+          <a href="/styles">Styles</a> page.
         </p>
       </section>
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { HighlighterCore } from 'shiki/core';
 
-export type Lang = 'tsx' | 'html' | 'bash';
+export type Lang = 'tsx' | 'html' | 'bash' | 'css';
 
 /*
  * Page-matched themes: component names in the form accent, attributes in
@@ -48,6 +48,19 @@ const makeTheme = (name: string, type: 'light' | 'dark', c: Palette) => ({
       scope: ['punctuation.definition.string', 'string punctuation'],
       settings: { foreground: c.value },
     },
+    // CSS: selectors read like components, properties like attributes.
+    {
+      scope: ['entity.other.attribute-name.class.css', 'entity.name.tag.css'],
+      settings: { foreground: c.tag },
+    },
+    {
+      scope: ['support.type.property-name', 'variable.css', 'variable.argument.css'],
+      settings: { foreground: c.attr },
+    },
+    {
+      scope: ['support.constant', 'support.function', 'keyword.other.unit'],
+      settings: { foreground: c.value },
+    },
     { scope: ['comment'], settings: { foreground: c.muted, fontStyle: 'italic' } },
   ],
 });
@@ -71,7 +84,7 @@ const darkTheme = makeTheme('formulaire-dark', 'dark', {
 });
 
 /*
- * Fine-grained Shiki, loaded on demand: only the three languages the site
+ * Fine-grained Shiki, loaded on demand: only the languages the site
  * shows, our own themes, and the JavaScript regex engine (no WebAssembly).
  * The page renders first; highlighting arrives in its own small chunks.
  */
@@ -87,6 +100,7 @@ const getHighlighter = () =>
         import('shiki/langs/tsx.mjs'),
         import('shiki/langs/html.mjs'),
         import('shiki/langs/bash.mjs'),
+        import('shiki/langs/css.mjs'),
       ],
       engine: createJavaScriptRegexEngine(),
     })

@@ -145,8 +145,29 @@ code {
   text-decoration: none;
 }
 
-.masthead-link:hover {
+.masthead-link:hover,
+.masthead-link[aria-current='page'] {
   color: var(--ink);
+}
+
+/* Inner pages: a way back on the left, the same nav on the right. */
+.masthead-split {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.intro code {
+  white-space: nowrap;
+}
+
+.back-link span {
+  display: inline-block;
+  margin-right: 0.25em;
+  transition: transform 150ms ease-out;
+}
+
+.back-link:hover span {
+  transform: translateX(-2px);
 }
 
 .masthead-nav {
@@ -1148,4 +1169,59 @@ body.is-resizing {
   box-shadow: 0 0 0 1px var(--rule);
   font-family: var(--mono);
   font-size: 0.875rem;
+}
+
+/* ---------------------------------------------------------------- styles */
+
+.recipe {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 5rem;
+}
+
+.recipe-text {
+  justify-self: center;
+  width: min(var(--col), 100%);
+}
+
+.recipe h2 {
+  margin: 0;
+  color: var(--faint);
+  font-size: inherit;
+  font-weight: 500;
+}
+
+.recipe p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.token-table {
+  width: 100%;
+  margin-top: 1.25rem;
+  border-collapse: collapse;
+  font-size: 1rem;
+}
+
+.token-table th {
+  padding: 0 0 0.5rem;
+  color: var(--muted);
+  font-weight: 500;
+  text-align: left;
+}
+
+.token-table td {
+  padding: 0.625rem 1rem 0.625rem 0;
+  border-top: 1px solid var(--rule);
+  vertical-align: baseline;
+}
+
+.token-table td:last-child {
+  padding-right: 0;
+  color: var(--muted);
+}
+
+.token-table code {
+  font-size: 0.875rem;
+  white-space: nowrap;
 }
