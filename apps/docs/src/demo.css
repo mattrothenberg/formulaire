@@ -145,8 +145,29 @@ code {
   text-decoration: none;
 }
 
-.masthead-link:hover {
+.masthead-link:hover,
+.masthead-link[aria-current='page'] {
   color: var(--ink);
+}
+
+/* Inner pages: a way back on the left, the same nav on the right. */
+.masthead-split {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.intro code {
+  white-space: nowrap;
+}
+
+.back-link span {
+  display: inline-block;
+  margin-right: 0.25em;
+  transition: transform 150ms ease-out;
+}
+
+.back-link:hover span {
+  transform: translateX(-2px);
 }
 
 .masthead-nav {

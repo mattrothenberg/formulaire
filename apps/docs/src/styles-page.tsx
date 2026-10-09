@@ -45,20 +45,20 @@ const headingCss = `.heading {
 
 const gridformsCss = `/*
  * FormKeep's Gridforms: cream paper, dark lines, Helvetica, open sides.
- * Paper stays paper, so every color is set, dark theme or not.
+ * In a dark color-scheme, the same form in light ink on warm charcoal.
  */
 .gridforms {
-  --gf-paper: oklch(99% 0.035 102);
+  --gf-paper: light-dark(oklch(99% 0.035 102), oklch(22% 0.012 95));
   --gf-paper-2: var(--gf-paper);
-  --gf-hover: oklch(97% 0.06 100);
-  --gf-highlight: oklch(95.5% 0.08 100);
-  --gf-line: oklch(42% 0 0);
-  --gf-ink: oklch(22% 0 0);
-  --gf-muted: oklch(30% 0 0);
-  --gf-faint: oklch(45% 0 0);
-  --gf-accent: oklch(30% 0 0);
-  --gf-danger: oklch(50% 0.19 27);
-  --gf-danger-bg: oklch(96% 0.03 40);
+  --gf-hover: light-dark(oklch(97% 0.06 100), oklch(25.5% 0.018 95));
+  --gf-highlight: light-dark(oklch(95.5% 0.08 100), oklch(29% 0.03 95));
+  --gf-line: light-dark(oklch(42% 0 0), oklch(58% 0.01 95));
+  --gf-ink: light-dark(oklch(22% 0 0), oklch(95% 0.03 100));
+  --gf-muted: light-dark(oklch(30% 0 0), oklch(84% 0.02 100));
+  --gf-faint: light-dark(oklch(45% 0 0), oklch(72% 0.015 100));
+  --gf-accent: var(--gf-ink);
+  --gf-danger: light-dark(oklch(50% 0.19 27), oklch(74% 0.15 25));
+  --gf-danger-bg: light-dark(oklch(96% 0.03 40), oklch(27% 0.04 25));
   --gf-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --gf-font-label: var(--gf-font);
   --gf-label-size: 0.625rem;
@@ -73,7 +73,7 @@ const gridformsCss = `/*
   --gf-legend-pad-top: calc(var(--gf-pad-y) * 1.4);
   --gf-legend-pad-bottom: calc(var(--gf-pad-y) * 0.6);
   --gf-legend-rule: 3px;
-  --gf-legend-rule-color: oklch(30% 0 0);
+  --gf-legend-rule-color: var(--gf-ink);
 
   border-inline-width: 0;
   border-block-start-width: 0;
@@ -340,11 +340,15 @@ function StylesPage() {
         )}
       </style>
 
-      <header className="masthead wide">
+      <header className="masthead masthead-split wide">
+        <a className="masthead-link back-link" href="/">
+          <span aria-hidden="true">←</span> Formulaire
+        </a>
+        {/* Same nav as the home page; only the current page changes. */}
         <nav className="masthead-nav">
           <ThemeToggle theme={theme} onChange={setTheme} />
-          <a className="masthead-link" href="/">
-            Formulaire
+          <a className="masthead-link" href="/styles" aria-current="page">
+            Styles
           </a>
           <a className="masthead-link" href={REPO_URL}>
             GitHub
@@ -379,7 +383,8 @@ function StylesPage() {
       <Recipe title="Gridforms" form={<BankForm />} code={gridformsCss}>
         FormKeep's <a href="https://formkeep.com/gridforms">Gridforms</a>,
         rebuilt from tokens: cream paper, dark lines, Helvetica throughout,
-        square corners and open sides. One section uses a lighter subheading.
+        square corners and open sides. One section uses a lighter subheading. In
+        dark mode, light ink on warm charcoal.
       </Recipe>
 
       <Recipe
