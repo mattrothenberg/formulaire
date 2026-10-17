@@ -1,0 +1,44 @@
+/*
+ * formulaire + shadcn/ui: point the --gf-* tokens at a shadcn theme.
+ *
+ *   import 'formulaire-ui/styles.css';
+ *   import 'formulaire-ui/shadcn.css';
+ *
+ * shadcn defines its variables on :root and .dark, so the form follows the
+ * app's theme (and its .dark class) instead of prefers-color-scheme.
+ *
+ * Its own layer, ordered after formulaire, so these beat the core's dark-mode
+ * rules whatever their specificity. Your unlayered CSS still wins over both.
+ */
+@layer formulaire, formulaire-shadcn;
+
+@layer formulaire-shadcn {
+  /* Print keeps the core's black-on-white tokens. */
+  @media not print {
+    .gf,
+    .gf-popup {
+      --gf-paper: var(--background);
+      --gf-paper-2: var(--muted);
+      --gf-line: var(--border);
+      --gf-ink: var(--foreground);
+      --gf-muted: var(--muted-foreground);
+      --gf-faint: var(--muted-foreground);
+      --gf-accent: var(--primary);
+      --gf-highlight: var(--accent);
+      --gf-danger: var(--destructive);
+      --gf-danger-bg: color-mix(
+        in oklch,
+        var(--destructive) 8%,
+        var(--background)
+      );
+      --gf-radius: var(--radius);
+      --gf-font-label: var(
+        --font-mono,
+        ui-monospace,
+        'SF Mono',
+        Menlo,
+        monospace
+      );
+    }
+  }
+}
