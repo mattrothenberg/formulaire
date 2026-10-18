@@ -19,6 +19,7 @@
     "forms",
     "grid",
     "base-ui",
+    "shadcn",
     "gridforms",
     "css"
   ],
@@ -37,6 +38,7 @@
       }
     },
     "./styles.css": "./dist/styles.css",
+    "./shadcn.css": "./dist/shadcn.css",
     "./package.json": "./package.json"
   },
   "files": [

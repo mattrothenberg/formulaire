@@ -74,6 +74,17 @@ Formulaire ships one look and keeps every visual choice in a `--gf-*` custom pro
 
 More recipes, including a rebuild of the original Gridforms look, are on the [Styles page](https://formulaire.mattrothenberg.com/styles).
 
+## shadcn/ui
+
+Using [shadcn/ui](https://ui.shadcn.com)? Import the bridge after the core stylesheet and the form takes its colors, radius and mono font from your shadcn theme:
+
+```tsx
+import 'formulaire-ui/styles.css';
+import 'formulaire-ui/shadcn.css';
+```
+
+It points the `--gf-*` tokens at shadcn's variables (`--background`, `--border`, `--primary`, `--destructive`, `--radius` and the rest), so the form follows your `.dark` class rather than `prefers-color-scheme`. It sits in its own layer after `formulaire`, so your unlayered CSS still overrides it.
+
 ## Input masks
 
 Formulaire doesn't bundle a mask library. `GridForm.Input` passes its `ref` straight to the `<input>`, so any ref-based masker works. [Maskito](https://maskito.dev) handles the cursor position, pasting and undo well, and `@maskito/phone` formats numbers by country:

@@ -7,12 +7,12 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   // The stylesheet ships as-is: plain CSS in a cascade layer, no processing.
-  copy: ['src/styles.css'],
+  copy: ['src/styles.css', 'src/shadcn.css'],
   // Fail the build on packaging mistakes before they reach npm.
   publint: true,
   attw: {
     level: 'error',
     // attw only resolves JS and types; the stylesheet export is plain CSS.
-    excludeEntrypoints: ['./styles.css'],
+    excludeEntrypoints: ['./styles.css', './shadcn.css'],
   },
 });
